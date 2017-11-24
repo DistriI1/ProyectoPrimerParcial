@@ -1,0 +1,52 @@
+Sistema HADES
+El sistema HADES gestiona la creación de reservas de una empresa de cruceros.
+El sistema además se encuentra integrado con cada uno de sus cruceros, permitiendo la validación en todo momento de las turistas.
+Se debe considerar la creación de 4 diferentes clientes para el sistema.
+1. Cliente Gráfico que permite la creación de reservas en un crucero.
+2. Cliente modo-texto (consola) que permite realizar el proceso de "check-in" y asignación de camarotes, de acuerdo a la reservación realizada.
+3. Cliente modo-texto que permite el registro de consumos adicionales por parte de los turistas en el bar del crucero.
+4. Cliente Gráfico que permite ejecutar el proceso de "check-out" una vez que ha finalizado el crucero.
+Condiciones iniciales
+- La empresa cuenta con algunos cruceros. Solo existen dos tipos de crucero, el Alfa que contiene 10 camarotes y el Omega que contiene 15 camarotes.
+- Los camarotes pueden ser de los siguientes tipos: Presidencial con capacidad 4 personas, Placer con capacidad de 4 a 6 personas y Ecologico con capacidad para 6 personas. Cada tipo tiene diferentes precios.
+- Usted debe definir la cantidad de camarotes disponibles de cada tipo en cada tipo de crucero el alfa o el omega.
+- Los cruceros realizan tres diferentes recorridos: Aventura Mágica de 4 días, Aventura Ideal de 5 días y Aventura Extrema de 8 días.
+- Los precios se calculan en base a las siguientes formulas:
+Valor Diario por Tipo de Camarote:
+Camarote Ecologico = PRECIO_BASE + (10%*PERSONA REGISTRADA)
+Camarote Placer = (PRECIO_BASE + 25%) + (5% * PERSONA_REGISTRADA)
+Camarote Presidencial = (PRECIO_BASE + 55%) + (10% * PERSONA_REGISTRADA)
+Valor del Tour (recorrido)
+PRECIO_DIARIO_CAMAROTE * #DIAS_TOUR
+Adicionalmente al momento de realizar la reserva el cliente puede escoger entre tres tipos de alimentación: Normal, Gourmet, Completa.
+Los valores de la alimentación son:
+Normal: $15 por persona registrada adulta, 10 por menores de 12 años.
+Gourmet: $20 por persona registrada adulta, 12 por menores de 12 años .
+Completa: $30 por persona registrada adulta, 15 por menores de 12 años.
+Descripción de los procesos.
+1. Reserva de Viaje (Cliente Gráfico)
+Un encargado de la empresa viajera, puede realizar una cotización o compra del tour. Para esto necesita la siguiente información, fecha de viaje, recorrido, tipo de camarote, personas incluidas, tipo de alimentación. Adicionalmente los nombres completos, identificación y fecha de nacimiento de cada viajero.
+El encargado gana una comisión del 10% por cada reserva facturada; sin embargo, tiene la potestad de asignar descuentos a los clientes tomándolos de su comisión.
+Se debe verificar la disponibilidad antes de realizar la venta.
+Se asume que el pago del 100% del valor cotizado se realiza en ese momento.
+2. Proceso de chek-in
+Un encargado de la empresa, recibe el código de reserva, despliega la información de los viajeros asigandos a la misma y permite el registro de maletas.
+Cada viajero tiene derecho a una maleta de hasta 25KG para los recorridos Aventura Mágica y Aventura Ideal; pára Aventura Extrema hasta dos maletas que no sobrepasen los 32 kg.
+Por cada kilo adicional se factura un valor de 10USD, sin embargo, no pueden exceder de 10 Kilos por camarote.
+3. Registro de Consumos Adicionales
+Cada bar del crucero puede facturar consumos adicionales realizados por los clientes, como bebidas alcoholicas o sancks. Se debe configurar una carta de licores y menu de snacks general de la empresa.
+4. Proceso de Cehck-out, este proceso se da una vez que el crucero ha finalizado y consiste en la consolidación por cada reserva de los consumos adicionales y valores adicionales facturados para generar las facturas finales por cada reserva. 
+Adicionalmente este proceso debe presesntar un reporte consolidado en el que se indique cuanto se vendió al finalizar cada crucero.
+Notas:
+Deben utilizar la BD definida en clases
+Deben utilizar al menos 3 lenguajes de programación diferentes.
+La comunicación debe ser exclusiva por sockets
+Se debe programar el servidor el cual será el único que se conecte a la Base de Datos.
+Se debe definir un protocolo en conjunto por los dos grupos
+La comunicación con la BD es solo atravez del servidor. Los clientes se conectan con el servidor solo mediante el paso de mensajes.
+No se deben realizar funcionalidades adicionales.
+Recuerde, esto es un concurso en el que se premia al mejor grupo.
+Además de la funcionalidad se revisará la implementación y se realizará defensa personal a cada miembro del equipo.
+Cada equipo debe crear su proyecto en un repositorio GIT o Bitbuket pero privado para evitar la filtración de información.
+Cada persona debe tener su propio usuario en el repositorio para constatar su aporte al proyecto.
+Si los grupos tienen funcionalidades copiadas, tendrán la calificación de 0 y se reportará el evento a las autoridades del departamento para el trámite correspondiente.

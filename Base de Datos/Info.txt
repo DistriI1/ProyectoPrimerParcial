@@ -1,0 +1,1 @@
+Se debe agregar la base de dato, con sus respectivos scripts para que todos los integrantes del grupo tengan acceso

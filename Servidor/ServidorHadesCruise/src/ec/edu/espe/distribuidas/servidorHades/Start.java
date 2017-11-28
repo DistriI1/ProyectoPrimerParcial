@@ -7,12 +7,19 @@ package ec.edu.espe.distribuidas.servidorHades;
 
 import ec.edu.espe.distribuidas.servidorHades.model.Tour;
 import ec.edu.espe.distribuidas.servidorHades.model.Cliente;
+import ec.edu.espe.distribuidas.servidorHades.model.Reserva;
+import ec.edu.espe.distribuidas.servidorHades.model.TipoAlimentacion;
+import ec.edu.espe.distribuidas.servidorHades.model.TipoTour;
+import ec.edu.espe.distribuidas.servidorHades.model.TuristaReserva;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -76,6 +83,10 @@ class Client extends Thread {
                 Start.LOG.info(messageFromClient);
                 Cliente cliente;
                 Tour tour;
+                Reserva reserva;
+                TuristaReserva turistaReserva;
+                TipoAlimentacion tipoAlimentacion;
+                TipoTour tipoTour;
 
                 if (messageFromClient.contains("salir")) {
                     socket.close();
@@ -141,8 +152,44 @@ class Client extends Thread {
 
                     case "REGRESERVA":
 
-//                        String ltali = "LTALI";
-//                        break;
+                        reserva = new Reserva();
+                        cuerpoMensaje = messageFromClient.split("&");
+                        reserva.setIdentificacion(cuerpoMensaje[0].substring(65, 75));
+                        reserva.setCodigoTour(Integer.parseInt(cuerpoMensaje[1]));
+                        reserva.setCodigoCrucero(Integer.parseInt(cuerpoMensaje[2]));
+                        reserva.setCodigoCamarote(Integer.parseInt(cuerpoMensaje[3]));
+                        reserva.setCodigoTipoAlimentacion(cuerpoMensaje[4]);
+                        reserva.setEstado(cuerpoMensaje[5]);
+                        break;
+
+                    case "REGTURISTA":
+
+                        turistaReserva = new TuristaReserva();
+                        cuerpoMensaje = messageFromClient.split("&");
+                        turistaReserva.setCodigoreserva(cuerpoMensaje[0].substring(65, 75));
+                        turistaReserva.setTipoIdentificacion(cuerpoMensaje[1]);
+                        turistaReserva.setIdentificacion(cuerpoMensaje[2]);
+                        turistaReserva.setNombre(cuerpoMensaje[3]);
+                        Date fechaTemp = new Date();
+                        fechaTemp.setYear(Integer.parseInt(cuerpoMensaje[4].substring(0, 3)));
+                        fechaTemp.setMonth(Integer.parseInt(cuerpoMensaje[4].substring(4, 5)));
+                        fechaTemp.setMonth(Integer.parseInt(cuerpoMensaje[4].substring(6, 7)));
+                        turistaReserva.setFechaNacimiento(fechaTemp);
+                        break;
+
+                    case "LISTTURRES":
+
+                        turistaReserva = new TuristaReserva();
+                        turistaReserva.setCodigoreserva(messageFromClient.substring(65));
+                        break;
+
+                    case "REGPESOMAL":
+
+                        turistaReserva = new TuristaReserva();
+                        cuerpoMensaje=messageFromClient.split("&");
+                        turistaReserva.setIdentificacion(cuerpoMensaje[0].substring(65,75));
+                        turistaReserva.setPesoMaleta(new BigDecimal(cuerpoMensaje[1]));
+                        break;
                 }
 
 //                out.println(respuesta);

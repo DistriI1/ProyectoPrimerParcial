@@ -5,6 +5,8 @@
  */
 package ec.edu.espe.distribuidas.servidorHades;
 
+import ec.edu.espe.distribuidas.servidorHades.model.Tour;
+import ec.edu.espe.distribuidas.servidorHades.model.Cliente;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -72,29 +74,75 @@ class Client extends Thread {
             while (true) {
                 String messageFromClient = in.readLine();
                 Start.LOG.info(messageFromClient);
+                Cliente cliente;
+                Tour tour;
+
+                if (messageFromClient.contains("salir")) {
+                    socket.close();
+                    Start.LOG.info("Conexión Cerrada");
+                    break;
+                }
+
                 String idMensaje = "";
+                String[] cuerpoMensaje;
 
                 idMensaje = messageFromClient.substring(23, 33);
 
                 switch (idMensaje) {
                     case "REGCLIENTE":
 
-                        String[] cuerpoMensaje;
-                        cuerpoMensaje = messageFromClient.split("&");
-                        Cliente cliente = new Cliente();
-                        cliente.setTipoIdentificacion(cuerpoMensaje[0].substring(65, 68));
-                        cliente.setIdentificacion(cuerpoMensaje[1]);
-                        cliente.setNombre(cuerpoMensaje[2]);
-                        cliente.setPais(cuerpoMensaje[3]);
-                        cliente.setDireccion(cuerpoMensaje[4]);
-                        cliente.setTelefono(cuerpoMensaje[5]);
-                        cliente.setCorreoElectronico(cuerpoMensaje[6]);
+                        try {
+                            cuerpoMensaje = messageFromClient.split("&");
+                            cliente = new Cliente();
+                            cliente.setTipoIdentificacion(cuerpoMensaje[0].substring(65, 68));
+                            cliente.setIdentificacion(cuerpoMensaje[1]);
+                            cliente.setNombre(cuerpoMensaje[2]);
+                            cliente.setPais(cuerpoMensaje[3]);
+                            cliente.setDireccion(cuerpoMensaje[4]);
+                            cliente.setTelefono(cuerpoMensaje[5]);
+                            cliente.setCorreoElectronico(cuerpoMensaje[6]);
+                            out.println(cliente.getTipoIdentificacion());
+                        } catch (Exception e) {
+                            Start.LOG.info("error" + e.getMessage());
+                        }
                         break;
-                }
-                if (messageFromClient.contains("salir")) {
-                    socket.close();
-                    Start.LOG.info("Conexión Cerrada");
-                    break;
+
+                    case "BUSCLIENTE":
+
+                        cliente = new Cliente();
+                        cliente.setIdentificacion(messageFromClient.substring(65));
+                        break;
+
+                    case "LISTIPTOUR":
+
+                        String lttour = "LTTOUR";
+                        break;
+
+                    case "LISTOURSEC":
+
+                        String ltour = "LTOUR";
+                        cuerpoMensaje = messageFromClient.split("&");
+                        tour = new Tour();
+                        tour.setCodigoTipoTour(cuerpoMensaje[1]);
+                        break;
+
+                    case "LISTOURCAM":
+
+                        String lcam = "LCAM";
+                        cuerpoMensaje = messageFromClient.split("&");
+                        tour = new Tour();
+                        tour.setCodigo(Integer.parseInt(cuerpoMensaje[1]));
+                        break;
+
+                    case "LISTIPALIM":
+
+                        String ltali = "LTALI";
+                        break;
+
+                    case "REGRESERVA":
+
+//                        String ltali = "LTALI";
+//                        break;
                 }
 
 //                out.println(respuesta);

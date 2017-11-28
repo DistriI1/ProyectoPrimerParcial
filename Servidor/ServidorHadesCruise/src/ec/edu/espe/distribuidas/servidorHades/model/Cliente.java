@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.edu.espe.distribuidas.servidorHades;
+package ec.edu.espe.distribuidas.servidorHades.model;
 
 /**
  *
@@ -14,6 +14,7 @@ public class Cliente {
     private String identificacion;
     private String tipoIdentificacion;
     private String nombre;
+    private String apellido;
     private String pais;
     private String direccion;
     private String telefono;
@@ -22,14 +23,23 @@ public class Cliente {
     public Cliente() {
     }
 
-    public Cliente(String identificacion, String tipoIdentificacion, String nombre, String pais, String direccion, String telefono, String correoElectronico) {
+    public Cliente(String identificacion, String tipoIdentificacion, String nombre, String apellido, String pais, String direccion, String telefono, String correoElectronico) {
         this.identificacion = identificacion;
         this.tipoIdentificacion = tipoIdentificacion;
         this.nombre = nombre;
+        this.apellido = apellido;
         this.pais = pais;
         this.direccion = direccion;
         this.telefono = telefono;
         this.correoElectronico = correoElectronico;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
     }
 
     public String getIdentificacion() {

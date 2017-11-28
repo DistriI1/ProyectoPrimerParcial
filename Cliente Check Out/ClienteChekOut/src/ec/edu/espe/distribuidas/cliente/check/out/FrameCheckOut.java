@@ -30,17 +30,32 @@ public class FrameCheckOut extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
     }
-    SocketCliente sock = new SocketCliente();
+    SocketCheckOut sock = new SocketCheckOut();
     private static final Logger LOG = Logger.getLogger(Start.class.getName());
     private static final char[] CONSTS_HEX = { '0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f' };
+    public String longitudCuerpo(String longitud){
+        int numero = 0;
+        String longi="";
+        char[] arrayChar = longitud.toCharArray();
+		for(int i=0; i<arrayChar.length; i++){
+			numero++;
+                        
+		}
+                if(numero<=9){
+                    longi = "000" + numero;
+                }
+                else if(numero>9)
+                {
+                    longi="00"+numero;
+                }
+                return longi;
+    }
     public String cabecera(String Codigo){
-        String Cabecera1 = "RQCHON";
-        String Cabecera2 = "FACTCONCLI";
-        String Cabecera3 = "0001";
-        String Cabecera4 = "S0000001";
-        //String Hash = "";
-        //Hash = String.valueOf(hash("123"));
-        return Cabecera1+fechaHora()+Cabecera2+Cabecera3+hash(Codigo)+Cabecera4;
+        String tipoMensaje = "RQ";
+        String originador = "CHON";
+        String idMensaje = "FACTCONCLI";
+        String cuerpoLongitud = longitudCuerpo(Codigo);
+        return tipoMensaje+originador+fechaHora()+idMensaje+cuerpoLongitud+hash(Codigo)+Codigo;
     }
     public  String hash(String stringAEncriptar)
     {
@@ -81,6 +96,50 @@ public class FrameCheckOut extends javax.swing.JFrame {
         fecha=añoS+mesS+diaS+horaS+minutosS+segundosS;
         return fecha;
     }
+    public void recibirRespuesta(String peticion){
+        String tipoMensajeR = "";
+        String originadorR = "";
+        String idMensajeR = "";
+        String fechaHoraR= "";
+        String longitudR = "";
+        String hashR = "";
+        String respuesta = "";
+      //  String cabecera = tipoMensaje+originador+fechaHora()+idMensaje;
+        Integer longitud = 4;
+        char[] arrayChar = peticion.toCharArray();
+        for(int i=0; i<arrayChar.length; i++){
+            if(i<=1){
+                tipoMensajeR += arrayChar[i];
+            }
+            
+            if(i<=5&&i>1){
+                originadorR += arrayChar[i];
+            }
+           
+            if(i<=19&&i>1&&i>5){
+                fechaHoraR += arrayChar[i];
+            }
+            if(i<=29&&i>1&&i>5&&i>19){
+                idMensajeR += arrayChar[i];
+            }
+            if(i<=33&&i>1&&i>5&&i>19&&i>29){
+                longitudR += arrayChar[i];
+            }
+            if(i<=64&&i>1&&i>5&&i>19&&i>29&&i>33){
+                hashR += arrayChar[i];
+            }
+            if(i>64){
+                respuesta += arrayChar[i];
+            }
+        }
+        JOptionPane.showMessageDialog(null, "TIPO DE MENSAJE " + tipoMensajeR);
+        JOptionPane.showMessageDialog(null, "ORIGINADOR " + originadorR);
+        JOptionPane.showMessageDialog(null, "FECHA Y HORA " + fechaHoraR);
+        JOptionPane.showMessageDialog(null, "ID MENSAJE " + idMensajeR);
+        JOptionPane.showMessageDialog(null, "LONGITUD " + longitudR);
+        JOptionPane.showMessageDialog(null, "CODIGO HASH " + hashR);
+        JOptionPane.showMessageDialog(null, "RESPUESTA " + respuesta);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -95,18 +154,24 @@ public class FrameCheckOut extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         txtCodigoReserva = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(520, 580));
-        setMinimumSize(new java.awt.Dimension(520, 580));
+        setBackground(new java.awt.Color(0, 0, 0));
+        setMaximumSize(new java.awt.Dimension(451, 485));
+        setMinimumSize(new java.awt.Dimension(451, 485));
         setName("Frame CheckOut"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(520, 580));
+        setUndecorated(true);
+        setPreferredSize(new java.awt.Dimension(451, 485));
         getContentPane().setLayout(null);
 
-        jLabel1.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
-        jLabel1.setText("CRUCERO HADES");
+        jLabel1.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Ingrese el codigo de la reserva");
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(170, 0, 120, 60);
+        jLabel1.setBounds(130, 140, 170, 15);
 
         jLabel2.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
         jLabel2.setText("Check Out");
@@ -114,13 +179,23 @@ public class FrameCheckOut extends javax.swing.JFrame {
         jLabel2.setBounds(20, 50, 80, 15);
 
         txtCodigoReserva.setFont(new java.awt.Font("Trebuchet MS", 0, 10)); // NOI18N
+        txtCodigoReserva.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtCodigoReserva.setSelectionColor(new java.awt.Color(0, 153, 153));
+        txtCodigoReserva.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCodigoReservaActionPerformed(evt);
+            }
+        });
         txtCodigoReserva.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtCodigoReservaKeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCodigoReservaKeyTyped(evt);
+            }
         });
         getContentPane().add(txtCodigoReserva);
-        txtCodigoReserva.setBounds(120, 100, 190, 30);
+        txtCodigoReserva.setBounds(130, 160, 190, 30);
 
         btnBuscar.setFont(new java.awt.Font("Trebuchet MS", 0, 11)); // NOI18N
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/edu/espe/distribuidas/cliente/check/out/iconos/search.png"))); // NOI18N
@@ -131,33 +206,65 @@ public class FrameCheckOut extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnBuscar);
-        btnBuscar.setBounds(160, 140, 110, 30);
+        btnBuscar.setBounds(170, 210, 100, 30);
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(20, 260, 410, 210);
+
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/edu/espe/distribuidas/cliente/check/out/iconos/FondoCheckOut.PNG"))); // NOI18N
+        getContentPane().add(jLabel3);
+        jLabel3.setBounds(0, -20, 460, 520);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtCodigoReservaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoReservaKeyPressed
         // TODO add your handling code here:
-        
-        
-        
-       // txtCodigoReserva="";
     }//GEN-LAST:event_txtCodigoReservaKeyPressed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
         String Codigo = "";
-        Codigo = txtCodigoReserva.getText();
-        
-        JOptionPane.showMessageDialog(null, "Operación realizada correctamente" + cabecera(Codigo));
         try{
-         sock.send(cabecera(Codigo));
+            String server= "192.168.1.114";
+            Integer port=2000;
+            SocketCheckOut client = new SocketCheckOut(server, port);
+            client.connect();
+            Codigo = txtCodigoReserva.getText();
+           // client.send(cabecera(Codigo));
+            JOptionPane.showMessageDialog(null, "Operación realizada correctamente " + cabecera(Codigo));
+            recibirRespuesta("RPSERV20171122234559FACTCONCLI00083867994d1be6e111e067ac5dbf3ae3cOKK&");
+          //  recibirRespuesta(cabecera(Codigo));
+            
         }catch(IOException e){
          LOG.log(Level.SEVERE,"Ocurrio un error",e);
         }
-        
-        
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void txtCodigoReservaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoReservaKeyTyped
+        // TODO add your handling code here:
+        String Caracteres = txtCodigoReserva.getText(); 
+        if(Caracteres.length()>=10){ 
+            evt.consume(); 
+        } 
+    }//GEN-LAST:event_txtCodigoReservaKeyTyped
+
+    private void txtCodigoReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoReservaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCodigoReservaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -198,6 +305,9 @@ public class FrameCheckOut extends javax.swing.JFrame {
     private javax.swing.JButton btnBuscar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JTextField txtCodigoReserva;
     // End of variables declaration//GEN-END:variables
 }

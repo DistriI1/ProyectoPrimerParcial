@@ -35,6 +35,10 @@ public class SocketCheckOut {
         this.server = server;
         this.port = port;
     }
+
+    public SocketCheckOut() {
+    }
+    
     
     public void  connect() throws IOException{
         this.client=new Socket(this.server, this.port);

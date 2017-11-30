@@ -7,6 +7,7 @@ package ec.edu.espe.distribuidas.servidorHades;
 
 import ec.edu.espe.distribuidas.servidorHades.model.Tour;
 import ec.edu.espe.distribuidas.servidorHades.model.Cliente;
+import ec.edu.espe.distribuidas.servidorHades.model.Consumo;
 import ec.edu.espe.distribuidas.servidorHades.model.Reserva;
 import ec.edu.espe.distribuidas.servidorHades.model.TipoAlimentacion;
 import ec.edu.espe.distribuidas.servidorHades.model.TipoTour;
@@ -87,6 +88,8 @@ class Client extends Thread {
                 TuristaReserva turistaReserva;
                 TipoAlimentacion tipoAlimentacion;
                 TipoTour tipoTour;
+                Consumo consumo;
+                Date fechaTemp;
 
                 if (messageFromClient.contains("salir")) {
                     socket.close();
@@ -105,7 +108,7 @@ class Client extends Thread {
                         try {
                             cuerpoMensaje = messageFromClient.split("&");
                             cliente = new Cliente();
-                            cliente.setTipoIdentificacion(cuerpoMensaje[0].substring(65, 68));
+                            cliente.setTipoIdentificacion(cuerpoMensaje[0].substring(65));
                             cliente.setIdentificacion(cuerpoMensaje[1]);
                             cliente.setNombre(cuerpoMensaje[2]);
                             cliente.setPais(cuerpoMensaje[3]);
@@ -154,7 +157,7 @@ class Client extends Thread {
 
                         reserva = new Reserva();
                         cuerpoMensaje = messageFromClient.split("&");
-                        reserva.setIdentificacion(cuerpoMensaje[0].substring(65, 75));
+                        reserva.setIdentificacion(cuerpoMensaje[0].substring(65));
                         reserva.setCodigoTour(Integer.parseInt(cuerpoMensaje[1]));
                         reserva.setCodigoCrucero(Integer.parseInt(cuerpoMensaje[2]));
                         reserva.setCodigoCamarote(Integer.parseInt(cuerpoMensaje[3]));
@@ -166,11 +169,11 @@ class Client extends Thread {
 
                         turistaReserva = new TuristaReserva();
                         cuerpoMensaje = messageFromClient.split("&");
-                        turistaReserva.setCodigoreserva(cuerpoMensaje[0].substring(65, 75));
+                        turistaReserva.setCodigoreserva(cuerpoMensaje[0].substring(65));
                         turistaReserva.setTipoIdentificacion(cuerpoMensaje[1]);
                         turistaReserva.setIdentificacion(cuerpoMensaje[2]);
                         turistaReserva.setNombre(cuerpoMensaje[3]);
-                        Date fechaTemp = new Date();
+                        fechaTemp = new Date();
                         fechaTemp.setYear(Integer.parseInt(cuerpoMensaje[4].substring(0, 3)));
                         fechaTemp.setMonth(Integer.parseInt(cuerpoMensaje[4].substring(4, 5)));
                         fechaTemp.setMonth(Integer.parseInt(cuerpoMensaje[4].substring(6, 7)));
@@ -186,9 +189,39 @@ class Client extends Thread {
                     case "REGPESOMAL":
 
                         turistaReserva = new TuristaReserva();
-                        cuerpoMensaje=messageFromClient.split("&");
-                        turistaReserva.setIdentificacion(cuerpoMensaje[0].substring(65,75));
+                        cuerpoMensaje = messageFromClient.split("&");
+                        turistaReserva.setIdentificacion(cuerpoMensaje[0].substring(65));
                         turistaReserva.setPesoMaleta(new BigDecimal(cuerpoMensaje[1]));
+                        break;
+
+                    case "REGCONSTUR":
+
+                        reserva = new Reserva();
+                        consumo = new Consumo();
+                        fechaTemp = new Date();
+                        cuerpoMensaje = messageFromClient.split("&");
+                        reserva.setCodigoTour(Integer.parseInt(cuerpoMensaje[0].substring(65)));
+                        reserva.setCodigoCamarote(Integer.parseInt(cuerpoMensaje[1]));
+                        consumo.setCodigoItem(Integer.parseInt(cuerpoMensaje[2]));
+                        consumo.setCantidad(Integer.parseInt(cuerpoMensaje[3]));
+                        consumo.setReferencia(cuerpoMensaje[4]);
+                        fechaTemp.setYear(Integer.parseInt(cuerpoMensaje[5].substring(0, 3)));
+                        fechaTemp.setMonth(Integer.parseInt(cuerpoMensaje[5].substring(4, 5)));
+                        fechaTemp.setYear(Integer.parseInt(cuerpoMensaje[5].substring(6, 7)));
+                        consumo.setFecha(fechaTemp);
+                        consumo.setValor(new BigDecimal(cuerpoMensaje[6]));
+                        break;
+
+                    case "FACTCONCLI":
+
+                        reserva = new Reserva();
+                        reserva.setCodigo(messageFromClient.substring(65));
+                        break;
+
+                    case "REPVENTOUR":
+
+                        tour = new Tour();
+                        tour.setCodigo(Integer.parseInt(messageFromClient.substring(65)));
                         break;
                 }
 

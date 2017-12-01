@@ -26,6 +26,14 @@ public class TipoTour {
     private Integer duracion;
     
     private List<String[]> listado = new ArrayList<>();
+
+    public List<String[]> getListado() {
+        return listado;
+    }
+
+    public void setListado(List<String[]> listado) {
+        this.listado = listado;
+    }
     
     public TipoTour() {
     }

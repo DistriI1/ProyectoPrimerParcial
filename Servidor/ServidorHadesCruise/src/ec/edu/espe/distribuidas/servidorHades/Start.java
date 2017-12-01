@@ -8,6 +8,7 @@ package ec.edu.espe.distribuidas.servidorHades;
 import ec.edu.espe.distribuidas.servidorHades.model.Tour;
 import ec.edu.espe.distribuidas.servidorHades.model.Cliente;
 import ec.edu.espe.distribuidas.servidorHades.model.Consumo;
+import ec.edu.espe.distribuidas.servidorHades.model.Fecha;
 import ec.edu.espe.distribuidas.servidorHades.model.Reserva;
 import ec.edu.espe.distribuidas.servidorHades.model.TipoAlimentacion;
 import ec.edu.espe.distribuidas.servidorHades.model.TipoTour;
@@ -92,6 +93,8 @@ class Client extends Thread {
                 TipoTour tipoTour;
                 Consumo consumo;
                 Date fechaTemp;
+                Fecha fechaM = new Fecha();
+                
 
                 if (messageFromClient.contains("salir")) {
                     socket.close();
@@ -120,6 +123,8 @@ class Client extends Thread {
                             cliente.setCorreoElectronico(cuerpoMensaje[7]);
                             if (cliente.registrarCliente()) {
                                 respuesta.concat("RPSERV");
+                                respuesta.concat(fechaM.obtenerFecha());
+                                
                             }
                         } catch (Exception e) {
                             Start.LOG.info("error" + e.getMessage());

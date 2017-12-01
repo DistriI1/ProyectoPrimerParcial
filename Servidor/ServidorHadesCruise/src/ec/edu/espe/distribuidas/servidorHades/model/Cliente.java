@@ -151,6 +151,7 @@ public class Cliente {
                 System.out.println("Error: " + ex.getMessage());
             }
         }
+        return bandera;
     }
 
     public void buscarCliente() {
@@ -196,8 +197,6 @@ public class Cliente {
                 System.out.println("Error: " + ex.getMessage());
             }
         }
-
-        return bandera;
     }
 
 }

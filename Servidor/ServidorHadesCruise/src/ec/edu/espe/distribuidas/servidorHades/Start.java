@@ -100,7 +100,7 @@ class Client extends Thread {
                 String idMensaje = "";
                 String[] cuerpoMensaje;
 
-                idMensaje = messageFromClient.substring(23, 33);
+                idMensaje = messageFromClient.substring(20, 30);
 
                 switch (idMensaje) {
                     case "REGCLIENTE":
@@ -108,14 +108,15 @@ class Client extends Thread {
                         try {
                             cuerpoMensaje = messageFromClient.split("&");
                             cliente = new Cliente();
-                            cliente.setTipoIdentificacion(cuerpoMensaje[0].substring(65));
+                            cliente.setTipoIdentificacion(cuerpoMensaje[0].substring(64));
                             cliente.setIdentificacion(cuerpoMensaje[1]);
                             cliente.setNombre(cuerpoMensaje[2]);
-                            cliente.setPais(cuerpoMensaje[3]);
-                            cliente.setDireccion(cuerpoMensaje[4]);
-                            cliente.setTelefono(cuerpoMensaje[5]);
-                            cliente.setCorreoElectronico(cuerpoMensaje[6]);
-                            out.println(cliente.getTipoIdentificacion());
+                            cliente.setApellido(cuerpoMensaje[3]);
+                            cliente.setPais(cuerpoMensaje[4]);
+                            cliente.setDireccion(cuerpoMensaje[5]);
+                            cliente.setTelefono(cuerpoMensaje[6]);
+                            cliente.setCorreoElectronico(cuerpoMensaje[7]);
+                            cliente.registrarCliente();
                         } catch (Exception e) {
                             Start.LOG.info("error" + e.getMessage());
                         }
@@ -124,7 +125,7 @@ class Client extends Thread {
                     case "BUSCLIENTE":
 
                         cliente = new Cliente();
-                        cliente.setIdentificacion(messageFromClient.substring(65));
+                        cliente.setIdentificacion(messageFromClient.substring(64));
                         break;
 
                     case "LISTIPTOUR":
@@ -157,7 +158,7 @@ class Client extends Thread {
 
                         reserva = new Reserva();
                         cuerpoMensaje = messageFromClient.split("&");
-                        reserva.setIdentificacion(cuerpoMensaje[0].substring(65));
+                        reserva.setIdentificacion(cuerpoMensaje[0].substring(64));
                         reserva.setCodigoTour(Integer.parseInt(cuerpoMensaje[1]));
                         reserva.setCodigoCrucero(Integer.parseInt(cuerpoMensaje[2]));
                         reserva.setCodigoCamarote(Integer.parseInt(cuerpoMensaje[3]));
@@ -169,7 +170,7 @@ class Client extends Thread {
 
                         turistaReserva = new TuristaReserva();
                         cuerpoMensaje = messageFromClient.split("&");
-                        turistaReserva.setCodigoreserva(cuerpoMensaje[0].substring(65));
+                        turistaReserva.setCodigoreserva(cuerpoMensaje[0].substring(64));
                         turistaReserva.setTipoIdentificacion(cuerpoMensaje[1]);
                         turistaReserva.setIdentificacion(cuerpoMensaje[2]);
                         turistaReserva.setNombre(cuerpoMensaje[3]);
@@ -183,14 +184,14 @@ class Client extends Thread {
                     case "LISTTURRES":
 
                         turistaReserva = new TuristaReserva();
-                        turistaReserva.setCodigoreserva(messageFromClient.substring(65));
+                        turistaReserva.setCodigoreserva(messageFromClient.substring(64));
                         break;
 
                     case "REGPESOMAL":
 
                         turistaReserva = new TuristaReserva();
                         cuerpoMensaje = messageFromClient.split("&");
-                        turistaReserva.setIdentificacion(cuerpoMensaje[0].substring(65));
+                        turistaReserva.setIdentificacion(cuerpoMensaje[0].substring(64));
                         turistaReserva.setPesoMaleta(new BigDecimal(cuerpoMensaje[1]));
                         break;
 
@@ -200,7 +201,7 @@ class Client extends Thread {
                         consumo = new Consumo();
                         fechaTemp = new Date();
                         cuerpoMensaje = messageFromClient.split("&");
-                        reserva.setCodigoTour(Integer.parseInt(cuerpoMensaje[0].substring(65)));
+                        reserva.setCodigoTour(Integer.parseInt(cuerpoMensaje[0].substring(64)));
                         reserva.setCodigoCamarote(Integer.parseInt(cuerpoMensaje[1]));
                         consumo.setCodigoItem(Integer.parseInt(cuerpoMensaje[2]));
                         consumo.setCantidad(Integer.parseInt(cuerpoMensaje[3]));
@@ -215,13 +216,13 @@ class Client extends Thread {
                     case "FACTCONCLI":
 
                         reserva = new Reserva();
-                        reserva.setCodigo(messageFromClient.substring(65));
+                        reserva.setCodigo(messageFromClient.substring(64));
                         break;
 
                     case "REPVENTOUR":
 
                         tour = new Tour();
-                        tour.setCodigo(Integer.parseInt(messageFromClient.substring(65)));
+                        tour.setCodigo(Integer.parseInt(messageFromClient.substring(64)));
                         break;
                 }
 

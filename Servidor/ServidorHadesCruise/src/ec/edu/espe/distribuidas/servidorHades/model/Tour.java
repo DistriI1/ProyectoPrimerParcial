@@ -6,7 +6,13 @@
 package ec.edu.espe.distribuidas.servidorHades.model;
 
 import java.math.BigDecimal;
+import java.sql.CallableStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import oracle.jdbc.OracleTypes;
 
 /**
  *
@@ -26,6 +32,16 @@ public class Tour {
     private BigDecimal precioBase;
     private Integer porcentajeMenu;
 
+    private List<String[]> listado = new ArrayList<>();
+
+    public List<String[]> getListado() {
+        return listado;
+    }
+
+    public void setListado(List<String[]> listado) {
+        this.listado = listado;
+    }
+    
     public Tour() {
     }
 
@@ -129,5 +145,45 @@ public class Tour {
 
     public void setPorcentajeMenu(Integer porcentajeMenu) {
         this.porcentajeMenu = porcentajeMenu;
+    }
+    
+    public boolean solicitarTipos() {
+       Conexion cn = new Conexion();
+       boolean bandera = true;
+        try {
+
+            CallableStatement cst = cn.prepareCall("{call listadoTipoTOUR (?)}");
+            
+            //Creo un cursor
+            cst.registerOutParameter (1, OracleTypes.CURSOR);
+            cst.execute ();
+            ResultSet rset = (ResultSet)cst.getObject (1);
+
+            // Dump the cursor
+            while (rset.next ()){
+                String[] tipo  = new String[4];
+                tipo[0] = rset.getString("COD_TOUR");
+                tipo[1] = rset.getString("COD_TIPO_TOUR");
+                tipo[2] = rset.getString("DESCRIPCION");
+                tipo[3] = rset.getString("DURACION");
+                listado.add(tipo);
+            }
+            
+            // Cierro todos los recursos
+            rset.close();
+            cst.close();
+            cst.close();
+            
+        } catch (SQLException ex) {
+            bandera = false;
+            System.out.println("Error: " + ex.getMessage());
+        } finally {
+            try {
+                cn.close();
+            } catch (SQLException ex) {
+                System.out.println("Error: " + ex.getMessage());
+            }
+        }
+        return bandera;
     }
 }

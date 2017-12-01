@@ -43,6 +43,7 @@ public class Start {
 
         LOG.info("SERVIDOR HADES");
 
+        
         try {
             ServerSocket server = new ServerSocket(2001);
             LOG.info("Servidor esperando conexiones por el puerto 2001");

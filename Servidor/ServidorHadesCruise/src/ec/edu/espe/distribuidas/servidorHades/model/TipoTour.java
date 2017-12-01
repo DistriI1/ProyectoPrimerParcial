@@ -5,6 +5,15 @@
  */
 package ec.edu.espe.distribuidas.servidorHades.model;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.sql.CallableStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import oracle.jdbc.OracleTypes;
+
 /**
  *
  * @author joel
@@ -15,7 +24,9 @@ public class TipoTour {
     private String nombre;
     private String descripcion;
     private Integer duracion;
-
+    
+    private List<String[]> listado = new ArrayList<>();
+    
     public TipoTour() {
     }
 
@@ -56,5 +67,51 @@ public class TipoTour {
 
     public void setDuracion(Integer duracion) {
         this.duracion = duracion;
+    }
+    
+    public class StoreProcedures {
+
+    /**
+     * @param args the command line arguments
+     */
+
+    
+    public void solicitarTipos() {
+       Conexion cn = new Conexion();
+
+        try {
+
+            CallableStatement cst = cn.prepareCall("{call listadoTipoTOUR (?)}");
+            
+            //Creo un cursor
+            cst.registerOutParameter (1, OracleTypes.CURSOR);
+            cst.execute ();
+            ResultSet rset = (ResultSet)cst.getObject (1);
+
+            // Dump the cursor
+            while (rset.next ()){
+                String[] tipo  = new String[4];
+                tipo[0] = rset.getString("COD_TIPO_TOUR");
+                tipo[1] = rset.getString("NOMBRE");
+                tipo[2] = rset.getString("DESCRIPCION");
+                tipo[3] = rset.getString("DURACION");
+                listado.add(tipo);
+            }
+            
+            // Cierro todos los recursos
+            rset.close();
+            cst.close();
+            cst.close();
+            
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        } finally {
+            try {
+                cn.close();
+            } catch (SQLException ex) {
+                System.out.println("Error: " + ex.getMessage());
+            }
+        }
+    }
     }
 }

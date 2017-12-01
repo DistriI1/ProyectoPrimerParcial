@@ -154,8 +154,9 @@ public class Cliente {
         return bandera;
     }
 
-    public void buscarCliente() {
+    public boolean buscarCliente() {
         Conexion cn = new Conexion();
+        boolean bandera = true;
         try {
             // Carga el driver de oracle
             cn.conectar();
@@ -190,6 +191,7 @@ public class Cliente {
             
         } catch (SQLException ex) {
             System.out.println("Error: " + ex.getMessage());
+            bandera=false;
         } finally {
             try {
                 cn.close();
@@ -197,6 +199,8 @@ public class Cliente {
                 System.out.println("Error: " + ex.getMessage());
             }
         }
+        
+        return bandera;
     }
 
 }

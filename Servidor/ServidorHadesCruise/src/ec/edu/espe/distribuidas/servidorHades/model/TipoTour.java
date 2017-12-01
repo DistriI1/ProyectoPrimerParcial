@@ -24,7 +24,7 @@ public class TipoTour {
     private String nombre;
     private String descripcion;
     private Integer duracion;
-    
+
     private List<String[]> listado = new ArrayList<>();
 
     public List<String[]> getListado() {
@@ -34,7 +34,7 @@ public class TipoTour {
     public void setListado(List<String[]> listado) {
         this.listado = listado;
     }
-    
+
     public TipoTour() {
     }
 
@@ -77,35 +77,38 @@ public class TipoTour {
         this.duracion = duracion;
     }
 
-    public void solicitarTipos() {
-       Conexion cn = new Conexion();
+    public boolean solicitarTipos() {
+        Conexion cn = new Conexion();
+        boolean bandera = true ;
 
         try {
 
+            cn.conectar();
             CallableStatement cst = cn.prepareCall("{call listadoTipoTOUR (?)}");
-            
+
             //Creo un cursor
-            cst.registerOutParameter (1, OracleTypes.CURSOR);
-            cst.execute ();
-            ResultSet rset = (ResultSet)cst.getObject (1);
+            cst.registerOutParameter(1, OracleTypes.CURSOR);
+            cst.execute();
+            ResultSet rset = (ResultSet) cst.getObject(1);
 
             // Dump the cursor
-            while (rset.next ()){
-                String[] tipo  = new String[4];
+            while (rset.next()) {
+                String[] tipo = new String[4];
                 tipo[0] = rset.getString("COD_TIPO_TOUR");
                 tipo[1] = rset.getString("NOMBRE");
                 tipo[2] = rset.getString("DESCRIPCION");
                 tipo[3] = rset.getString("DURACION");
                 listado.add(tipo);
             }
-            
+
             // Cierro todos los recursos
             rset.close();
             cst.close();
             cst.close();
-            
+
         } catch (SQLException ex) {
             System.out.println("Error: " + ex.getMessage());
+            bandera=false;
         } finally {
             try {
                 cn.close();
@@ -113,6 +116,8 @@ public class TipoTour {
                 System.out.println("Error: " + ex.getMessage());
             }
         }
+        
+        return bandera;
     }
-    
+
 }

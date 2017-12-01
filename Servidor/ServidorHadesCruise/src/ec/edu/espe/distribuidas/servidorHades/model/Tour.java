@@ -147,15 +147,15 @@ public class Tour {
         this.porcentajeMenu = porcentajeMenu;
     }
     
-    public boolean solicitarTipos() {
+    public boolean solicitarTour() {
        Conexion cn = new Conexion();
        boolean bandera = true;
         try {
 
-            CallableStatement cst = cn.prepareCall("{call listadoTipoTOUR (?)}");
-            
+            CallableStatement cst = cn.prepareCall("{call listadoTOUR (?,?)}");
+            cst.setString(1, codigoTipoTour);
             //Creo un cursor
-            cst.registerOutParameter (1, OracleTypes.CURSOR);
+            cst.registerOutParameter (2, OracleTypes.CURSOR);
             cst.execute ();
             ResultSet rset = (ResultSet)cst.getObject (1);
 
@@ -163,9 +163,10 @@ public class Tour {
             while (rset.next ()){
                 String[] tipo  = new String[4];
                 tipo[0] = rset.getString("COD_TOUR");
-                tipo[1] = rset.getString("COD_TIPO_TOUR");
-                tipo[2] = rset.getString("DESCRIPCION");
-                tipo[3] = rset.getString("DURACION");
+                tipo[1] = rset.getString("NOMBRE");
+                tipo[2] = rset.getString("DURACION");
+                tipo[3] = rset.getString("FECHA_INICIO");
+                tipo[4] = rset.getString("FECHA_BASE");
                 listado.add(tipo);
             }
             

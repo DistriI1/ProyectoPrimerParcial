@@ -21,6 +21,14 @@ public class TipoAlimentacion {
     private String codigo;
     private String descripcion;
     private List<String[]> listado = new ArrayList<>();
+
+    public List<String[]> getListado() {
+        return listado;
+    }
+
+    public void setListado(List<String[]> listado) {
+        this.listado = listado;
+    }
     
     
     public TipoAlimentacion() {

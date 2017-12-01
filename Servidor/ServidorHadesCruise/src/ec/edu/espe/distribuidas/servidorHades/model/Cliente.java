@@ -151,4 +151,49 @@ public class Cliente {
         }
     }
 
+    public void buscarCliente() {
+        Conexion cn = new Conexion();
+        try {
+            // Carga el driver de oracle
+            cn.conectar();
+           
+            // Llamada al procedimiento almacenado
+            CallableStatement cst = cn.prepareCall("{call informacionCliente (?,?,?,?,?,?,?,?)}");
+            
+                // Parametro 1 del procedimiento almacenado
+                cst.setString(1, identificacion);
+                
+                // Definimos los tipos de los parametros de salida del procedimiento almacenado
+                cst.registerOutParameter(2, java.sql.Types.VARCHAR);
+                cst.registerOutParameter(3, java.sql.Types.VARCHAR);
+                cst.registerOutParameter(4, java.sql.Types.VARCHAR);
+                cst.registerOutParameter(5, java.sql.Types.VARCHAR);
+                cst.registerOutParameter(6, java.sql.Types.VARCHAR);
+                cst.registerOutParameter(7, java.sql.Types.VARCHAR);
+                cst.registerOutParameter(8, java.sql.Types.VARCHAR);
+                
+                // Ejecuta el procedimiento almacenado
+                cst.execute();
+                
+                // Se obtienen la salida del procedimineto almacenado
+                tipoIdentificacion = cst.getString(2);
+                nombre = cst.getString(3);
+                apellido = cst.getString(4);
+                pais = cst.getString(5);
+                direccion = cst.getString(6);
+                telefono = cst.getString(7);
+                correoElectronico = cst.getString(8);
+
+            
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        } finally {
+            try {
+                cn.close();
+            } catch (SQLException ex) {
+                System.out.println("Error: " + ex.getMessage());
+            }
+        }
+    }
+
 }

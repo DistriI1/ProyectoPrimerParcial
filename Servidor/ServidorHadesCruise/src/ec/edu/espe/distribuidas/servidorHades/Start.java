@@ -21,7 +21,10 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -140,6 +143,13 @@ class Client extends Thread {
                     case "LISTIPTOUR":
 
                         String lttour = "LTTOUR";
+                        tipoTour = new TipoTour();
+                        tipoTour.solicitarTipos();
+                        List<String[]> listado = new ArrayList<>();
+                        listado = tipoTour.getListado();
+                        for(int x=0;x<listado.size();x++) {
+                         System.out.println(Arrays.toString(listado.get(x)));
+                        }
                         break;
 
                     case "LISTOURSEC":

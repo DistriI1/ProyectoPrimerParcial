@@ -68,14 +68,7 @@ public class TipoTour {
     public void setDuracion(Integer duracion) {
         this.duracion = duracion;
     }
-    
-    public class StoreProcedures {
 
-    /**
-     * @param args the command line arguments
-     */
-
-    
     public void solicitarTipos() {
        Conexion cn = new Conexion();
 
@@ -113,5 +106,5 @@ public class TipoTour {
             }
         }
     }
-    }
+    
 }

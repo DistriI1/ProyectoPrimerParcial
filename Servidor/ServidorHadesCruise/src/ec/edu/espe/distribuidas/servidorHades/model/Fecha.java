@@ -11,7 +11,7 @@ import java.util.*;
  */
 public class Fecha {
     public String obtenerFecha() {
-        //Instanciamos el objeto Calendar
+           //Instanciamos el objeto Calendar
         //en fecha obtenemos la fecha y hora del sistema
         Calendar fecha = new GregorianCalendar();
         //Obtenemos el valor del año, mes, día,
@@ -24,7 +24,61 @@ public class Fecha {
         int minuto = fecha.get(Calendar.MINUTE);
         int segundo = fecha.get(Calendar.SECOND);
         
-        String fechaStr =""+año+mes+dia+hora+minuto;
-        return fechaStr;
+  
+        mes = mes+1;
+        
+        String diaS;
+        String mesS;
+        String horaS;
+        String minutoS;
+        String segundoS;
+
+        
+        if(dia < 10){
+            diaS = "0"+dia;
+        }
+        else{
+            diaS = ""+dia;
+        }
+        
+        if(mes < 10){
+            mesS = "0"+mes;
+        }
+        else{
+            mesS = ""+mes;
+        }
+        
+        if(hora < 10){
+            horaS = "0"+hora;
+        }
+        else{
+            horaS = ""+hora;
+        }
+         
+        
+        if(minuto < 10){
+            minutoS = "0"+minuto;
+        }
+        else{
+            minutoS = ""+minuto;
+        }
+         
+        if(segundo < 10){
+            segundoS = "0"+segundo;
+        }
+        else{
+            segundoS = ""+segundo;
+        }
+            
+        
+        String fechaFinal = ""+año+(mes+1)+diaS+horaS+minutoS+segundoS;
+      
+        return fechaFinal;
     }
+
+    public Fecha() {
+    }
+    
+    
+    
 }

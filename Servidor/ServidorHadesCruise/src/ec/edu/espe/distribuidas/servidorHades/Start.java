@@ -76,6 +76,8 @@ class Client extends Thread {
 
         try {
             String respuesta = "";
+            Date fechaActual = new Date();
+            String fecha = "";
             //String messageToClient = "SERVIDOR";
             //out.println(messageToClient);
 
@@ -116,7 +118,9 @@ class Client extends Thread {
                             cliente.setDireccion(cuerpoMensaje[5]);
                             cliente.setTelefono(cuerpoMensaje[6]);
                             cliente.setCorreoElectronico(cuerpoMensaje[7]);
-                            cliente.registrarCliente();
+                            if (cliente.registrarCliente()) {
+                                respuesta.concat("RPSERV");
+                            }
                         } catch (Exception e) {
                             Start.LOG.info("error" + e.getMessage());
                         }

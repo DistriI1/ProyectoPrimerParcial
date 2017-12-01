@@ -109,9 +109,10 @@ public class Cliente {
         this.correoElectronico = correoElectronico;
     }
 
-    public void registrarCliente() {
+    public boolean registrarCliente() {
 
         Conexion cn = new Conexion();
+        boolean bandera = true;
 
         try {
             // Carga el driver de oracle
@@ -142,6 +143,7 @@ public class Cliente {
 
         } catch (SQLException ex) {
             System.out.println("Error: " + ex.getMessage());
+            bandera = false;
         } finally {
             try {
                 cn.close();
@@ -194,6 +196,8 @@ public class Cliente {
                 System.out.println("Error: " + ex.getMessage());
             }
         }
+
+        return bandera;
     }
 
 }

@@ -5,6 +5,18 @@
  */
 package ec.edu.espe.distribuidas.servidorHades.model;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import oracle.jdbc.OracleTypes;
+
+
 /**
  *
  * @author joel
@@ -97,4 +109,51 @@ public class Cliente {
     public void setCorreoElectronico(String correoElectronico) {
         this.correoElectronico = correoElectronico;
     }
+    
+       public void registrarCliente() {
+        BufferedReader entrada = new BufferedReader(new InputStreamReader(System.in));
+        int id = -1;
+        Connection cn = null;
+
+        try {
+            // Carga el driver de oracle
+            DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+            
+            // Conecta con la base de datos orcldist con el usuario system y la contraseña password
+            cn = DriverManager.getConnection("jdbc:oracle:thin:@192.168.1.110:1521:orcldist", "c##distribuidas", "distribuidas112358");
+           
+            // Llamada al procedimiento almacenado
+            CallableStatement cst = cn.prepareCall("{call ingresoCliente (?,?,?,?,?,?,?,?)}");
+            
+            //Seteo los valores
+            cst.setString(1,identificacion);
+            cst.setString(2,tipoIdentificacion);
+            cst.setString(3,nombre);
+            cst.setString(4,apellido);
+            cst.setString(5,pais);
+            cst.setString(6,direccion);
+            cst.setString(7,telefono);
+            cst.setString(8,correoElectronico);
+            
+            System.out.println("Valores seteados");
+            
+            System.out.println(""+identificacion+tipoIdentificacion+nombre+apellido+pais+direccion+telefono+correoElectronico);
+            
+            cst.execute ();
+            
+            System.out.println("procedure ejecutado");
+            
+            cst.close();
+            
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        } finally {
+            try {
+                cn.close();
+            } catch (SQLException ex) {
+                System.out.println("Error: " + ex.getMessage());
+            }
+        }
+    }
+
 }

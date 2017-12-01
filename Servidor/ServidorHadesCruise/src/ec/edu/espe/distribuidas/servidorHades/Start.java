@@ -179,7 +179,6 @@ class Client extends Thread {
 
                     case "LISTIPTOUR":
 
-                        String lttour = "LTTOUR";
                         tipoTour = new TipoTour();
                         if (tipoTour.solicitarTipos()) 
                         {

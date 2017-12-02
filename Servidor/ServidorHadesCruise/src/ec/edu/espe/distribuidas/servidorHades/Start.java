@@ -20,11 +20,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -97,7 +94,6 @@ class Client extends Thread {
             TipoAlimentacion tipoAlimentacion;
             TipoTour tipoTour;
             Consumo consumo;
-            Date fechaTemp;
             Crucero crucero;
             Camarote camarote;
             String codigoReserva = "";
@@ -441,7 +437,6 @@ class Client extends Thread {
                         reserva = new Reserva();
                         consumo = new Consumo();
                         camarote = new Camarote();
-                        fechaTemp = new Date();
                         fechaInicial = "";
                         cuerpoMensaje = messageFromClient.split("&");
                         reserva.setCodigoTour(Integer.parseInt(cuerpoMensaje[0].substring(66)));

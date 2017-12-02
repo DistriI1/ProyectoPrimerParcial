@@ -273,7 +273,7 @@ public class Reserva {
         
         return bandera;
     }
-    public boolean factura() {
+    public boolean reporteConsolidado() {
         Conexion cn = new Conexion();
         boolean bandera = true;
         try {
@@ -309,7 +309,7 @@ public class Reserva {
         return bandera;
     }    
     
-       public boolean reporteConsolidado() {
+       public boolean factura() {
         Conexion cn = new Conexion();
         boolean bandera = true;
         try {
@@ -327,7 +327,7 @@ public class Reserva {
                 cst.execute();
                 
                 // Se obtienen la salida del procedimineto almacenado
-                consu = cst.getBigDecimal(2);
+                totalConsumos = cst.getBigDecimal(2);
                 recargo = cst.getInt(3);
 
             

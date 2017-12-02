@@ -216,12 +216,11 @@ public class Reserva {
 
             // Dump the cursor
             while (rset.next()) {
-                String[] tipo = new String[4];
-                tipo[0] = rset.getString("COD_TIPO_ALIMENTACION");
-                tipo[1] = rset.getString("DESCRIPCION");
+                String[] tipo = new String[1];
+                tipo[0] = rset.getString("IDENTIFICACION");
                 listado.add(tipo);
             }
-            codigoTipoTour = cst.getString(2);
+            codigoTipoTour = cst.getString(3);
 
             // Cierro todos los recursos
             rset.close();

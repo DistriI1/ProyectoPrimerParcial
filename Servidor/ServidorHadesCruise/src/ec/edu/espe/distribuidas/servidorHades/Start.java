@@ -376,10 +376,11 @@ class Client extends Thread {
                         reserva.setCodigo(messageFromClient.substring(66));
                         codigoReserva = reserva.getCodigo();
 
-                        if (reserva.solicitarTiposAlimentacion()) {
+                        if (reserva.listadoTuristas()) {
                             List<String[]> listado = new ArrayList<>();
                             listado = reserva.getListado();
                             cuerpo += "OKK";
+                            cuerpo+= reserva.getCodigoTipoTour();
                             for (int i = 0; i < listado.size(); i++) {
                                 cuerpo += Arrays.toString(listado.get(i)).replace(", ", "&");
                                 cuerpo += "|";

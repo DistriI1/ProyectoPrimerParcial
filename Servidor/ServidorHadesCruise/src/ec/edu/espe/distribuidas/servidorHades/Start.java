@@ -8,6 +8,7 @@ package ec.edu.espe.distribuidas.servidorHades;
 import ec.edu.espe.distribuidas.servidorHades.model.Tour;
 import ec.edu.espe.distribuidas.servidorHades.model.Cliente;
 import ec.edu.espe.distribuidas.servidorHades.model.Consumo;
+import ec.edu.espe.distribuidas.servidorHades.model.Crucero;
 import ec.edu.espe.distribuidas.servidorHades.model.Fecha;
 import ec.edu.espe.distribuidas.servidorHades.model.Reserva;
 import ec.edu.espe.distribuidas.servidorHades.model.TipoAlimentacion;
@@ -43,7 +44,6 @@ public class Start {
 
         LOG.info("SERVIDOR HADES");
 
-        
         try {
             ServerSocket server = new ServerSocket(2001);
             LOG.info("Servidor esperando conexiones por el puerto 2001");
@@ -86,18 +86,19 @@ class Client extends Thread {
             String cuerpo = "";
             //String messageToClient = "SERVIDOR";
             //out.println(messageToClient);
+            Cliente cliente;
+            Tour tour;
+            Reserva reserva;
+            TuristaReserva turistaReserva;
+            TipoAlimentacion tipoAlimentacion;
+            TipoTour tipoTour;
+            Consumo consumo;
+            Date fechaTemp;
+            Crucero crucero;
 
             while (true) {
                 String messageFromClient = in.readLine();
                 Start.LOG.info(messageFromClient);
-                Cliente cliente;
-                Tour tour;
-                Reserva reserva;
-                TuristaReserva turistaReserva;
-                TipoAlimentacion tipoAlimentacion;
-                TipoTour tipoTour;
-                Consumo consumo;
-                Date fechaTemp;
 
                 if (messageFromClient.contains("salir")) {
                     socket.close();
@@ -180,16 +181,14 @@ class Client extends Thread {
                     case "LISTIPTOUR":
 
                         tipoTour = new TipoTour();
-                        if (tipoTour.solicitarTipos()) 
-                        {
+                        if (tipoTour.solicitarTipos()) {
                             List<String[]> listado = new ArrayList<>();
                             listado = tipoTour.getListado();
-                            
+
                             cuerpo += "OKK";
-                            for(int i =0; i<listado.size();i++)
-                            {
-                                cuerpo+=Arrays.toString(listado.get(i)).replace(", ", "&");                                
-                                cuerpo+="|";
+                            for (int i = 0; i < listado.size(); i++) {
+                                cuerpo += Arrays.toString(listado.get(i)).replace(", ", "&");
+                                cuerpo += "|";
                             }
                             cuerpo = cuerpo.replace("[", "");
                             cuerpo = cuerpo.replace("]", "");
@@ -199,7 +198,7 @@ class Client extends Thread {
                             out.flush();
                             cabeza = "";
                             cuerpo = "";
-                            
+
                         } else {
                             cuerpo += "BAD";
                             cabeza += "RPSERV";
@@ -216,15 +215,13 @@ class Client extends Thread {
                         cuerpoMensaje = messageFromClient.split("&");
                         tour = new Tour();
                         tour.setCodigoTipoTour(cuerpoMensaje[1]);
-                        if(tour.solicitarTour())
-                        {
+                        if (tour.solicitarTour()) {
                             List<String[]> listado = new ArrayList<>();
-                            listado=tour.getListado();
+                            listado = tour.getListado();
                             cuerpo += "OKK";
-                            for(int i =0; i<listado.size();i++)
-                            {
-                                cuerpo+=Arrays.toString(listado.get(i)).replace(", ", "&");                                
-                                cuerpo+="|";
+                            for (int i = 0; i < listado.size(); i++) {
+                                cuerpo += Arrays.toString(listado.get(i)).replace(", ", "&");
+                                cuerpo += "|";
                             }
                             cuerpo = cuerpo.replace("[", "");
                             cuerpo = cuerpo.replace("]", "");
@@ -234,9 +231,7 @@ class Client extends Thread {
                             out.flush();
                             cabeza = "";
                             cuerpo = "";
-                        }
-                        else
-                        {
+                        } else {
                             cuerpo += "BAD";
                             cabeza += "RPSERV";
                             cabeza += fecha.obtenerFecha() + idMensaje + longitudCuerpo(cuerpo.length()) + md5(cuerpo);

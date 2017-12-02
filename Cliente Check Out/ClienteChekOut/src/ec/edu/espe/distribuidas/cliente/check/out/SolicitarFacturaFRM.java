@@ -152,6 +152,7 @@ public class SolicitarFacturaFRM extends javax.swing.JFrame {
         if(Caracteres.length()>=10){ 
             evt.consume(); 
         } 
+      
     }//GEN-LAST:event_txtCodigoReservaKeyTyped
 
     private void txtCodigoReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoReservaActionPerformed
@@ -179,11 +180,8 @@ public class SolicitarFacturaFRM extends javax.swing.JFrame {
             client.connect();
             Codigo = txtCodigoReserva.getText();
             client.send(peticion.cabecera(Codigo,"FACTCONCLI"));
-
             String message = client.read();
-            JOptionPane.showMessageDialog(null, "Operacion realizada correctamente " + message);
             respuesta.recibirRespuesta(message, jTable1, txtCodigoReserva);
-
             
         }catch(IOException e){
          LOG.log(Level.SEVERE,"Ocurrio un error",e);

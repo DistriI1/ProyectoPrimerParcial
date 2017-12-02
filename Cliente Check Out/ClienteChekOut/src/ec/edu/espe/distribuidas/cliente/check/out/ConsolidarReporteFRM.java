@@ -30,6 +30,7 @@ public class ConsolidarReporteFRM extends javax.swing.JFrame {
     public ConsolidarReporteFRM() {
         initComponents();
         this.setLocationRelativeTo(null);
+        
     }
     private Peticion peticion= new Peticion();
     private Respuesta respuesta = new Respuesta();
@@ -149,6 +150,15 @@ public class ConsolidarReporteFRM extends javax.swing.JFrame {
         if(Caracteres.length()>=10){ 
             evt.consume(); 
         } 
+          char caracter = evt.getKeyChar();
+
+      // Verificar si la tecla pulsada no es un digito
+      if(((caracter < '0') ||
+         (caracter > '9')) &&
+         (caracter != '\b' /*corresponde a BACK_SPACE*/))
+      {
+         evt.consume();  // ignorar el evento de teclado
+      }
     }//GEN-LAST:event_txtCodigoTourKeyTyped
 
     private void txtCodigoTourActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoTourActionPerformed
@@ -170,6 +180,7 @@ public class ConsolidarReporteFRM extends javax.swing.JFrame {
 
     private void btnBuscarReserva1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarReserva1ActionPerformed
         // TODO add your handling code here:
+        
         try{
             String Codigo = "";
             SocketCheckOut client = new SocketCheckOut();

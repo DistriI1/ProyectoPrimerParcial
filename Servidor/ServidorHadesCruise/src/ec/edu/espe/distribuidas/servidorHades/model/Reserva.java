@@ -158,15 +158,12 @@ public class Reserva {
             //Seteo los valores
             cst.setString(1, codigo);
             cst.setString(2, identificacion);
-            cst.setString(3, tipoIdentificacion);
-            cst.setString(4, codigoTipoTour);
-            cst.setInt(5, codigoCrucero);
-            cst.setInt(6, codigoCamarote);
-            cst.setString(7, codigoTipoCamarote);
-            cst.setString(8, codigoTipoAlimentacion);
-            cst.setString(9, valorFinal);
-            cst.setDate(9, (java.sql.Date) fechaEmision);
-            cst.setString(10, estado);
+            cst.setString(3, codigoTipoTour);
+            cst.setInt(4, codigoCrucero);
+            cst.setInt(5, codigoCamarote);
+            cst.setString(6, codigoTipoAlimentacion);
+            cst.setString(7, valorFinal);
+            cst.setString(8, estado);
             System.out.println("Valores seteados");
             cst.execute();
 

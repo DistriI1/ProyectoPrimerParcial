@@ -73,7 +73,7 @@ public class TipoAlimentacion {
             while (rset.next()) {
                 String[] tipo = new String[4];
                 tipo[0] = rset.getString("COD_TIPO_ALIMENTACION");
-                tipo[1] = rset.getString("NOMBRE");
+                tipo[1] = rset.getString("DESCRIPCION");
                 listado.add(tipo);
             }
 

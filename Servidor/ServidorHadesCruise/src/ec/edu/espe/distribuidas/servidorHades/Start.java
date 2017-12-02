@@ -117,7 +117,7 @@ class Client extends Thread {
                         try {
                             cuerpoMensaje = messageFromClient.split("&");
                             cliente = new Cliente();
-                            cliente.setTipoIdentificacion(cuerpoMensaje[0].substring(64));
+                            cliente.setTipoIdentificacion(cuerpoMensaje[0].substring(66));
                             cliente.setIdentificacion(cuerpoMensaje[1]);
                             cliente.setNombre(cuerpoMensaje[2]);
                             cliente.setApellido(cuerpoMensaje[3]);
@@ -152,13 +152,13 @@ class Client extends Thread {
                     case "BUSCLIENTE":
 
                         cliente = new Cliente();
-                        cliente.setIdentificacion(messageFromClient.substring(64));
+                        cliente.setIdentificacion(messageFromClient.substring(66));
                         if (cliente.buscarCliente()) {
 
                             cuerpo += "OKK";
                             cuerpo += cliente.getTipoIdentificacion() + "&" + cliente.getIdentificacion() + "&"
-                                    + cliente.getNombre() + "&" + cliente.getPais() + "&" + cliente.getDireccion() + "&"
-                                    + cliente.getTelefono() + "&" + cliente.getCorreoElectronico();
+                                    + cliente.getNombre() + "&" + cliente.getApellido() + "&" + cliente.getPais() + "&"
+                                    + cliente.getDireccion() + "&" + cliente.getTelefono() + "&" + cliente.getCorreoElectronico();
                             cabeza += "RPSERV";
                             cabeza += fecha.obtenerFecha() + idMensaje + longitudCuerpo(cuerpo.length()) + md5(cuerpo);
                             out.println(cabeza + cuerpo);
@@ -247,30 +247,110 @@ class Client extends Thread {
                         cuerpoMensaje = messageFromClient.split("&");
                         tour = new Tour();
                         tour.setCodigo(Integer.parseInt(cuerpoMensaje[1]));
+                        if (tour.solicitarCamarote()) {
+                            List<String[]> listado = new ArrayList<>();
+                            listado = tour.getListado();
+                            cuerpo += "OKK";
+                            for (int i = 0; i < listado.size(); i++) {
+                                cuerpo += Arrays.toString(listado.get(i)).replace(", ", "&");
+                                cuerpo += "|";
+                            }
+                            cuerpo = cuerpo.replace("[", "");
+                            cuerpo = cuerpo.replace("]", "");
+                            cabeza += "RPSERV";
+                            cabeza += fecha.obtenerFecha() + idMensaje + longitudCuerpo(cuerpo.length()) + md5(cuerpo);
+                            out.println(cabeza + cuerpo);
+                            out.flush();
+                            cabeza = "";
+                            cuerpo = "";
+                        } else {
+                            cuerpo += "BAD";
+                            cabeza += "RPSERV";
+                            cabeza += fecha.obtenerFecha() + idMensaje + longitudCuerpo(cuerpo.length()) + md5(cuerpo);
+                            out.println(cabeza + cuerpo);
+                            out.flush();
+                            cabeza = "";
+                            cuerpo = "";
+                        }
                         break;
 
                     case "LISTIPALIM":
 
-                        String ltali = "LTALI";
+                        tipoAlimentacion = new TipoAlimentacion();
+                        if (tipoAlimentacion.solicitarTiposAlimentacion()) {
+                            List<String[]> listado = new ArrayList<>();
+                            listado = tipoAlimentacion.getListado();
+                            cuerpo += "OKK";
+                            for (int i = 0; i < listado.size(); i++) {
+                                cuerpo += Arrays.toString(listado.get(i)).replace(", ", "&");
+                                cuerpo += "|";
+                            }
+                            cuerpo = cuerpo.replace("[", "");
+                            cuerpo = cuerpo.replace("]", "");
+                            cabeza += "RPSERV";
+                            cabeza += fecha.obtenerFecha() + idMensaje + longitudCuerpo(cuerpo.length()) + md5(cuerpo);
+                            out.println(cabeza + cuerpo);
+                            out.flush();
+                            cabeza = "";
+                            cuerpo = "";
+                        } else {
+                            cuerpo += "BAD";
+                            cabeza += "RPSERV";
+                            cabeza += fecha.obtenerFecha() + idMensaje + longitudCuerpo(cuerpo.length()) + md5(cuerpo);
+                            out.println(cabeza + cuerpo);
+                            out.flush();
+                            cabeza = "";
+                            cuerpo = "";
+                        }
+
                         break;
 
                     case "REGRESERVA":
 
                         reserva = new Reserva();
                         cuerpoMensaje = messageFromClient.split("&");
-                        reserva.setIdentificacion(cuerpoMensaje[0].substring(64));
+                        reserva.setIdentificacion(cuerpoMensaje[0].substring(66));
                         reserva.setCodigoTour(Integer.parseInt(cuerpoMensaje[1]));
                         reserva.setCodigoCrucero(Integer.parseInt(cuerpoMensaje[2]));
                         reserva.setCodigoCamarote(Integer.parseInt(cuerpoMensaje[3]));
                         reserva.setCodigoTipoAlimentacion(cuerpoMensaje[4]);
-                        reserva.setEstado(cuerpoMensaje[5]);
+                        reserva.setValorFinal(cuerpoMensaje[5]);
+                        reserva.setEstado(cuerpoMensaje[6]);
+
+                        if (true) {
+                            List<String[]> listado = new ArrayList<>();
+                            //reserva;
+                            cuerpo += "OKK";
+                            for (int i = 0; i < 10; i++) {
+                                cuerpo += Arrays.toString(listado.get(i)).replace(", ", "&");
+                                //listado = ;
+                                cuerpo += "|";
+                            }
+                            cuerpo = cuerpo.replace("[", "");
+                            cuerpo = cuerpo.replace("]", "");
+                            cabeza += "RPSERV";
+                            cabeza += fecha.obtenerFecha() + idMensaje + longitudCuerpo(cuerpo.length()) + md5(cuerpo);
+                            out.println(cabeza + cuerpo);
+                            out.flush();
+                            cabeza = "";
+                            cuerpo = "";
+                        } else {
+                            cuerpo += "BAD";
+                            cabeza += "RPSERV";
+                            cabeza += fecha.obtenerFecha() + idMensaje + longitudCuerpo(cuerpo.length()) + md5(cuerpo);
+                            out.println(cabeza + cuerpo);
+                            out.flush();
+                            cabeza = "";
+                            cuerpo = "";
+                        }
+
                         break;
 
                     case "REGTURISTA":
 
                         turistaReserva = new TuristaReserva();
                         cuerpoMensaje = messageFromClient.split("&");
-                        turistaReserva.setCodigoreserva(cuerpoMensaje[0].substring(64));
+                        turistaReserva.setCodigoreserva(cuerpoMensaje[0].substring(66));
                         turistaReserva.setTipoIdentificacion(cuerpoMensaje[1]);
                         turistaReserva.setIdentificacion(cuerpoMensaje[2]);
                         turistaReserva.setNombre(cuerpoMensaje[3]);
@@ -284,14 +364,14 @@ class Client extends Thread {
                     case "LISTTURRES":
 
                         turistaReserva = new TuristaReserva();
-                        turistaReserva.setCodigoreserva(messageFromClient.substring(64));
+                        turistaReserva.setCodigoreserva(messageFromClient.substring(66));
                         break;
 
                     case "REGPESOMAL":
 
                         turistaReserva = new TuristaReserva();
                         cuerpoMensaje = messageFromClient.split("&");
-                        turistaReserva.setIdentificacion(cuerpoMensaje[0].substring(64));
+                        turistaReserva.setIdentificacion(cuerpoMensaje[0].substring(66));
                         turistaReserva.setPesoMaleta(new BigDecimal(cuerpoMensaje[1]));
                         break;
 
@@ -301,7 +381,7 @@ class Client extends Thread {
                         consumo = new Consumo();
                         fechaTemp = new Date();
                         cuerpoMensaje = messageFromClient.split("&");
-                        reserva.setCodigoTour(Integer.parseInt(cuerpoMensaje[0].substring(64)));
+                        reserva.setCodigoTour(Integer.parseInt(cuerpoMensaje[0].substring(66)));
                         reserva.setCodigoCamarote(Integer.parseInt(cuerpoMensaje[1]));
                         consumo.setCodigoItem(Integer.parseInt(cuerpoMensaje[2]));
                         consumo.setCantidad(Integer.parseInt(cuerpoMensaje[3]));
@@ -316,13 +396,13 @@ class Client extends Thread {
                     case "FACTCONCLI":
 
                         reserva = new Reserva();
-                        reserva.setCodigo(messageFromClient.substring(64));
+                        reserva.setCodigo(messageFromClient.substring(66));
                         break;
 
                     case "REPVENTOUR":
 
                         tour = new Tour();
-                        tour.setCodigo(Integer.parseInt(messageFromClient.substring(64)));
+                        tour.setCodigo(Integer.parseInt(messageFromClient.substring(66)));
                         break;
                 }
 

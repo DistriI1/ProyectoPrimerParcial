@@ -25,14 +25,14 @@ public class Reserva {
     private Integer codigoCamarote;
     private String codigoTipoCamarote;
     private String codigoTipoAlimentacion;
-    private BigDecimal valorFinal;
+    private String valorFinal;
     private Date fechaEmision;
     private String estado;
 
     public Reserva() {
     }
 
-    public Reserva(String codigo, String identificacion, String tipoIdentificacion, Integer codigoTour, String codigoTipoTour, Integer codigoCrucero, Integer codigoCamarote, String codigoTipoCamarote, String codigoTipoAlimentacion, BigDecimal valorFinal, Date fechaEmision, String estado) {
+    public Reserva(String codigo, String identificacion, String tipoIdentificacion, Integer codigoTour, String codigoTipoTour, Integer codigoCrucero, Integer codigoCamarote, String codigoTipoCamarote, String codigoTipoAlimentacion, String valorFinal, Date fechaEmision, String estado) {
         this.codigo = codigo;
         this.identificacion = identificacion;
         this.tipoIdentificacion = tipoIdentificacion;
@@ -119,11 +119,11 @@ public class Reserva {
         this.codigoTipoAlimentacion = codigoTipoAlimentacion;
     }
 
-    public BigDecimal getValorFinal() {
+    public String getValorFinal() {
         return valorFinal;
     }
 
-    public void setValorFinal(BigDecimal valorFinal) {
+    public void setValorFinal(String valorFinal) {
         this.valorFinal = valorFinal;
     }
 
@@ -164,7 +164,7 @@ public class Reserva {
             cst.setInt(6, codigoCamarote);
             cst.setString(7, codigoTipoCamarote);
             cst.setString(8, codigoTipoAlimentacion);
-            cst.setBigDecimal(9, valorFinal);
+            cst.setString(9, valorFinal);
             cst.setDate(9, (java.sql.Date) fechaEmision);
             cst.setString(10, estado);
             System.out.println("Valores seteados");

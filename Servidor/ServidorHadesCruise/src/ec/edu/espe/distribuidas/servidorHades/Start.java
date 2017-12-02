@@ -213,10 +213,38 @@ class Client extends Thread {
 
                     case "LISTOURSEC":
 
-                        String ltour = "LTOUR";
                         cuerpoMensaje = messageFromClient.split("&");
                         tour = new Tour();
                         tour.setCodigoTipoTour(cuerpoMensaje[1]);
+                        if(tour.solicitarTour())
+                        {
+                            List<String[]> listado = new ArrayList<>();
+                            listado=tour.getListado();
+                            cuerpo += "OKK";
+                            for(int i =0; i<listado.size();i++)
+                            {
+                                cuerpo+=Arrays.toString(listado.get(i)).replace(", ", "&");                                
+                                cuerpo+="|";
+                            }
+                            cuerpo = cuerpo.replace("[", "");
+                            cuerpo = cuerpo.replace("]", "");
+                            cabeza += "RPSERV";
+                            cabeza += fecha.obtenerFecha() + idMensaje + longitudCuerpo(cuerpo.length()) + md5(cuerpo);
+                            out.println(cabeza + cuerpo);
+                            out.flush();
+                            cabeza = "";
+                            cuerpo = "";
+                        }
+                        else
+                        {
+                            cuerpo += "BAD";
+                            cabeza += "RPSERV";
+                            cabeza += fecha.obtenerFecha() + idMensaje + longitudCuerpo(cuerpo.length()) + md5(cuerpo);
+                            out.println(cabeza + cuerpo);
+                            out.flush();
+                            cabeza = "";
+                            cuerpo = "";
+                        }
                         break;
 
                     case "LISTOURCAM":

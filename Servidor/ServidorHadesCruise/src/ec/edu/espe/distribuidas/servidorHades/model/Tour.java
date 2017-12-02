@@ -152,21 +152,21 @@ public class Tour {
        boolean bandera = true;
         try {
 
+            cn.conectar();
             CallableStatement cst = cn.prepareCall("{call listadoTOUR (?,?)}");
             cst.setString(1, codigoTipoTour);
             //Creo un cursor
             cst.registerOutParameter (2, OracleTypes.CURSOR);
             cst.execute ();
-            ResultSet rset = (ResultSet)cst.getObject (1);
-
+            ResultSet rset = (ResultSet)cst.getObject (2);
             // Dump the cursor
             while (rset.next ()){
-                String[] tipo  = new String[4];
+                String[] tipo  = new String[5];
                 tipo[0] = rset.getString("COD_TOUR");
                 tipo[1] = rset.getString("NOMBRE");
                 tipo[2] = rset.getString("DURACION");
                 tipo[3] = rset.getString("FECHA_INICIO");
-                tipo[4] = rset.getString("FECHA_BASE");
+                tipo[4] = rset.getString("PRECIO_BASE");
                 listado.add(tipo);
             }
             

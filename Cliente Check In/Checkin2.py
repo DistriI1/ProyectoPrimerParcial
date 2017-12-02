@@ -34,9 +34,9 @@ def validate_date(date_text):
     except ValueError:
         return datetime.datetime.strptime(time.strftime('%Y-%m-%d'), '%Y-%m-%d')
 def validar_peso(tipo_tour, peso):
-    if(tipo_tour == 'AVMAGIC' or tipo_tour == 'AVIDEAL') and peso <= 25.0:
+    if(tipo_tour == 'TIT1' or tipo_tour == 'TIT2') and peso <= 25.0:
         return True
-    elif (tipo_tour == 'AVEXTRE') and peso <= 32.0:
+    elif (tipo_tour == 'TIT3') and peso <= 32.0:
         return True
     else:
         print 'Peso excedido.'
@@ -58,32 +58,36 @@ def registro_maleta(skt):
         print "Head>" + cabecera
         print "Body>" + cuerpo
         if hashcode == cabecera[34:]:#Esta integro?
-            cuerpo_partes = cuerpo.split('|')
-            if cuerpo_partes[0] == 'OKK':
-                tipo_tour = cuerpo_partes[1]
+            resultado = cuerpo[0:3]
+            print "res: "+ resultado
+            if resultado == 'OKK':
+                tipo_tour = cuerpo[3:7]
+                print "tip: "+ tipo_tour
+                cuerpo_partes = cuerpo[7:].split('|')
                 print ' '
                 print '======================LISTADO DE TURISTAS=================================='
                 print ' > Reserva: ' + cod_reserva
-                if tipo_tour == 'AVMAGIC':
+                if tipo_tour == 'TIT1':
                     print ' > Tipo Tour: Aventura Magica'
-                elif tipo_tour == 'AVEXTRE':
+                elif tipo_tour == 'TIT3':
                     print ' > Tipo Tour: Aventura Extrema'
-                elif tipo_tour == 'AVIDEAL':
+                elif tipo_tour == 'TIT2':
                     print ' > Tipo Tour: Aventura Ideal'
                 turistas = []
                 peso_total = 0
                 peso_max_mi = 25
                 peso_max_ex = 32
-                for i in range(2, len(cuerpo_partes) - 1):
+                print "cuepo_partes" +str(len(cuerpo_partes))
+                for i in range(0, len(cuerpo_partes)):
                     turis = Turista.Turista()
                     turis.identificacion = cuerpo_partes[i]
                     turistas.append(turis)
-                    print " > Turista " + str(i-1) + ": " + turistas[i-2].get_identificacion()
+                    print " > Turista " + str(i+1) + ": " + turistas[i].get_identificacion()
                     print 'Ingrese el peso de la :'
                     peso = get_specific_input(5, 'dec') #validar
-                    turistas[i-2].set_peso_maleta(peso)
+                    turistas[i].set_peso_maleta(peso)
                     peso_total = float(peso_total) + float(peso)
-                    print "peso "+ str(i-1) +':'+ turistas[i-2].get_peso_maleta()
+                    print "peso "+ str(i) +':'+ turistas[i].get_peso_maleta()
                 print "numturis:"+ str(len(turistas))
                 print "pesoofi:" +str(peso_max_mi * len(turistas) + 10)
                 print 'tipotour' + tipo_tour
@@ -97,9 +101,28 @@ def registro_maleta(skt):
                 elif tipo_tour == 'AVEXTRE' and peso_total > peso_max_ex * len(turistas) + 10:
                     print 'Peso total por camarote excedido. Maximo por turista 32kg'
                 else:
-                    print 'Peso Correcto' + str(peso_total)
-                    
-                    print 'Enviado.'
+                    print 'Peso Correcto.' + str(peso_total)
+                    print 'Enviar cambios? (y/n):'
+                    resp = get_specific_input(1, 'var')
+                    if resp == 'y' or resp == 'Y':
+                        for j in range(0, len(turistas)):
+                            envio_mensaje('REGPESOMAL', turistas[j].get_identificacion() + '|' + str(turistas[j].get_peso_maleta()), skt)
+                            mensaje_recibido = skt.recv(69) #Cuantos bytes?
+                            cabecera = mensaje_recibido[:66]
+                            cuerpo = mensaje_recibido[66:]
+                            mda = md5.new()
+                            mda.update(cuerpo)
+                            hashcode = mda.hexdigest()
+                            if hashcode == cabecera[34:]:
+                                if cuerpo == 'OKK':
+                                    print 'Cambios guardados. Turista ' + str(j+1)
+                                elif cuerpo == 'BAD':
+                                    print 'ERROR. Algo salio mal. Intente nuevamente.'
+                            else:
+                                print 'ERROR. Falla de integridad en la cadena.'
+                        print 'Enviado.'
+                    elif resp == 'n' or resp == 'N':
+                        print '-------------'
             elif cuerpo_partes[0] == 'BAD':
                 print 'ERROR. Algo salio mal. Intente nuevamente.'
         else:

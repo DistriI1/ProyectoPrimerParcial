@@ -32,6 +32,25 @@ public class Reserva {
     private String valorFinal;
     private Date fechaEmision;
     private String estado;
+    
+    private BigDecimal totalConsumo;
+    private Integer recargo;
+
+    public BigDecimal getTotalConsumo() {
+        return totalConsumo;
+    }
+
+    public void setTotalConsumo(BigDecimal totalConsumo) {
+        this.totalConsumo = totalConsumo;
+    }
+
+    public Integer getRecargo() {
+        return recargo;
+    }
+
+    public void setRecargo(Integer recargo) {
+        this.recargo = recargo;
+    }
 
     private List<String[]> listado = new ArrayList<>();
 
@@ -173,10 +192,6 @@ public class Reserva {
             cst.setString(1, codigo);
             cst.setString(2, identificacion);
             cst.setInt(3, codigoCrucero);
-            cst.setInt(4, codigoCamarote);
-            cst.setString(5, codigoTipoAlimentacion);
-            cst.setString(6, valorFinal);
-            cst.setString(7, estado);
             System.out.println("Valores seteados");
             cst.execute();
 
@@ -240,4 +255,40 @@ public class Reserva {
         
         return bandera;
     }
+    public boolean factura() {
+        Conexion cn = new Conexion();
+        boolean bandera = true;
+        try {
+            // Carga el driver de oracle
+            cn.conectar();
+           
+            // Llamada al procedimiento almacenado
+            CallableStatement cst = cn.prepareCall("{call informacionFactura (?,?,?)}");
+            
+                cst.setString(1, codigo);
+                // Definimos los tipos de los parametros de salida del procedimiento almacenado
+                cst.registerOutParameter(2, java.sql.Types.DECIMAL);
+                cst.registerOutParameter(3, java.sql.Types.INTEGER);
+                // Ejecuta el procedimiento almacenado
+                cst.execute();
+                
+                // Se obtienen la salida del procedimineto almacenado
+                totalConsumo = cst.getBigDecimal(2);
+                recargo = cst.getInt(3);
+
+            
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage());
+            bandera=false;
+        } finally {
+            try {
+                cn.close();
+            } catch (SQLException ex) {
+                System.out.println("Error: " + ex.getMessage());
+            }
+        }
+        
+        return bandera;
+    }    
+        
 }

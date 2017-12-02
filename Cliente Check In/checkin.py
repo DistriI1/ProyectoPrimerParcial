@@ -29,6 +29,17 @@ def validate_date(date_text):
     except ValueError:
         return datetime.datetime.strptime(time.strftime('%Y-%m-%d'), '%Y-%m-%d')
 
+def envio_mensaje(id, cuerpo, skt):
+    tipo_mensaje = 'RQ'
+    originador = 'CHIN'
+    fecha_mensaje = time.strftime("%Y%m%d%H%M%S")
+    cuerpo_length = len(cuerpo)
+    mda = md5.new()
+    mda.update(cuerpo)
+    hash_cuerpo = mda.hexdigest()
+    cabecera = tipo_mensaje + originador + fecha_mensaje + id + ('000' if cuerpo_length < 10 else ('00' if cuerpo_length < 100 else ('0' if cuerpo_length < 1000 else ''))) + str(cuerpo_length) + hash_cuerpo
+    mensaje =  cabecera + cuerpo
+    skt.send(mensaje)
 def main():
     sock=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     ip='localhost'

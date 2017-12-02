@@ -350,7 +350,7 @@ class Client extends Thread {
                         fechaTemp.setMonth(Integer.parseInt(cuerpoMensaje[4].substring(4, 5)));
                         fechaTemp.setMonth(Integer.parseInt(cuerpoMensaje[4].substring(6, 7)));
                         turistaReserva.setFechaNacimiento(fechaTemp);
-                        
+
                         if (turistaReserva.registrarTurista()) {
                             cuerpo += "OKK";
                             cabeza += "RPSERV";
@@ -372,8 +372,35 @@ class Client extends Thread {
 
                     case "LISTTURRES":
 
-                        turistaReserva = new TuristaReserva();
-                        turistaReserva.setCodigoreserva(messageFromClient.substring(66));
+                        reserva = new Reserva();
+                        reserva.setCodigo(messageFromClient.substring(66));
+                        codigoReserva = reserva.getCodigo();
+
+                        if (reserva.solicitarTiposAlimentacion()) {
+                            List<String[]> listado = new ArrayList<>();
+                            listado = reserva.getListado();
+                            cuerpo += "OKK";
+                            for (int i = 0; i < listado.size(); i++) {
+                                cuerpo += Arrays.toString(listado.get(i)).replace(", ", "&");
+                                cuerpo += "|";
+                            }
+                            cuerpo = cuerpo.replace("[", "");
+                            cuerpo = cuerpo.replace("]", "");
+                            cabeza += "RPSERV";
+                            cabeza += fecha.obtenerFecha() + idMensaje + longitudCuerpo(cuerpo.length()) + md5(cuerpo);
+                            out.println(cabeza + cuerpo);
+                            out.flush();
+                            cabeza = "";
+                            cuerpo = "";
+                        } else {
+                            cuerpo += "BAD";
+                            cabeza += "RPSERV";
+                            cabeza += fecha.obtenerFecha() + idMensaje + longitudCuerpo(cuerpo.length()) + md5(cuerpo);
+                            out.println(cabeza + cuerpo);
+                            out.flush();
+                            cabeza = "";
+                            cuerpo = "";
+                        }
                         break;
 
                     case "REGPESOMAL":

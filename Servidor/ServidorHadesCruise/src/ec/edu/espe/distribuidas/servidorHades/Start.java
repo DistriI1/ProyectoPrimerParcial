@@ -43,6 +43,7 @@ public class Start {
 
         LOG.info("SERVIDOR HADES");
 
+        
         try {
             ServerSocket server = new ServerSocket(2001);
             LOG.info("Servidor esperando conexiones por el puerto 2001");
@@ -80,8 +81,9 @@ class Client extends Thread {
 
         try {
             String respuesta = "";
-            Date fechaActual = new Date();
-            String fecha = "";
+            Fecha fecha = new Fecha();
+            String cabeza = "";
+            String cuerpo = "";
             //String messageToClient = "SERVIDOR";
             //out.println(messageToClient);
 
@@ -96,8 +98,6 @@ class Client extends Thread {
                 TipoTour tipoTour;
                 Consumo consumo;
                 Date fechaTemp;
-                Fecha fechaM = new Fecha();
-                
 
                 if (messageFromClient.contains("salir")) {
                     socket.close();
@@ -124,11 +124,25 @@ class Client extends Thread {
                             cliente.setDireccion(cuerpoMensaje[5]);
                             cliente.setTelefono(cuerpoMensaje[6]);
                             cliente.setCorreoElectronico(cuerpoMensaje[7]);
+
                             if (cliente.registrarCliente()) {
-                                respuesta.concat("RPSERV");
-                                respuesta.concat(fechaM.obtenerFecha());
-                                
+                                cuerpo += "OKK";
+                                cabeza += "RPSERV";
+                                cabeza += fecha.obtenerFecha() + idMensaje + longitudCuerpo(cuerpo.length()) + md5(cuerpo);
+                                out.println(cabeza + cuerpo);
+                                out.flush();
+                                respuesta = "";
+                                cuerpo = "";
+                            } else {
+                                cuerpo += "BAD";
+                                cabeza += "RPSERV";
+                                cabeza += fecha.obtenerFecha() + idMensaje + longitudCuerpo(cuerpo.length()) + md5(cuerpo);
+                                out.println(cabeza + cuerpo);
+                                out.flush();
+                                cabeza = "";
+                                cuerpo = "";
                             }
+
                         } catch (Exception e) {
                             Start.LOG.info("error" + e.getMessage());
                         }
@@ -138,31 +152,103 @@ class Client extends Thread {
 
                         cliente = new Cliente();
                         cliente.setIdentificacion(messageFromClient.substring(64));
+                        if (cliente.buscarCliente()) {
+
+                            cuerpo += "OKK";
+                            cuerpo += cliente.getTipoIdentificacion() + "&" + cliente.getIdentificacion() + "&"
+                                    + cliente.getNombre() + "&" + cliente.getPais() + "&" + cliente.getDireccion() + "&"
+                                    + cliente.getTelefono() + "&" + cliente.getCorreoElectronico();
+                            cabeza += "RPSERV";
+                            cabeza += fecha.obtenerFecha() + idMensaje + longitudCuerpo(cuerpo.length()) + md5(cuerpo);
+                            out.println(cabeza + cuerpo);
+                            out.flush();
+                            cabeza = "";
+                            cuerpo = "";
+                        } else {
+
+                            cuerpo += "BAD";
+                            cabeza += "RPSERV";
+                            cabeza += fecha.obtenerFecha() + idMensaje + longitudCuerpo(cuerpo.length()) + md5(cuerpo);
+                            out.println(cabeza + cuerpo);
+                            out.flush();
+                            cabeza = "";
+                            cuerpo = "";
+                        }
+
                         break;
 
                     case "LISTIPTOUR":
 
-                        String lttour = "LTTOUR";
                         tipoTour = new TipoTour();
-                        tipoTour.solicitarTipos();
-                        List<String[]> listado = new ArrayList<>();
-                        listado = tipoTour.getListado();
-                        for(int x=0;x<listado.size();x++) {
-                         System.out.println(Arrays.toString(listado.get(x)));
+                        if (tipoTour.solicitarTipos()) 
+                        {
+                            List<String[]> listado = new ArrayList<>();
+                            listado = tipoTour.getListado();
+                            
+                            cuerpo += "OKK";
+                            for(int i =0; i<listado.size();i++)
+                            {
+                                cuerpo+=Arrays.toString(listado.get(i)).replace(", ", "&");                                
+                                cuerpo+="|";
+                            }
+                            cuerpo = cuerpo.replace("[", "");
+                            cuerpo = cuerpo.replace("]", "");
+                            cabeza += "RPSERV";
+                            cabeza += fecha.obtenerFecha() + idMensaje + longitudCuerpo(cuerpo.length()) + md5(cuerpo);
+                            out.println(cabeza + cuerpo);
+                            out.flush();
+                            cabeza = "";
+                            cuerpo = "";
+                            
+                        } else {
+                            cuerpo += "BAD";
+                            cabeza += "RPSERV";
+                            cabeza += fecha.obtenerFecha() + idMensaje + longitudCuerpo(cuerpo.length()) + md5(cuerpo);
+                            out.println(cabeza + cuerpo);
+                            out.flush();
+                            cabeza = "";
+                            cuerpo = "";
                         }
                         break;
 
                     case "LISTOURSEC":
 
-                        String ltour = "LTOUR";
                         cuerpoMensaje = messageFromClient.split("&");
                         tour = new Tour();
                         tour.setCodigoTipoTour(cuerpoMensaje[1]);
+                        if(tour.solicitarTour())
+                        {
+                            List<String[]> listado = new ArrayList<>();
+                            listado=tour.getListado();
+                            cuerpo += "OKK";
+                            for(int i =0; i<listado.size();i++)
+                            {
+                                cuerpo+=Arrays.toString(listado.get(i)).replace(", ", "&");                                
+                                cuerpo+="|";
+                            }
+                            cuerpo = cuerpo.replace("[", "");
+                            cuerpo = cuerpo.replace("]", "");
+                            cabeza += "RPSERV";
+                            cabeza += fecha.obtenerFecha() + idMensaje + longitudCuerpo(cuerpo.length()) + md5(cuerpo);
+                            out.println(cabeza + cuerpo);
+                            out.flush();
+                            cabeza = "";
+                            cuerpo = "";
+                        }
+                        else
+                        {
+                            cuerpo += "BAD";
+                            cabeza += "RPSERV";
+                            cabeza += fecha.obtenerFecha() + idMensaje + longitudCuerpo(cuerpo.length()) + md5(cuerpo);
+                            out.println(cabeza + cuerpo);
+                            out.flush();
+                            cabeza = "";
+                            cuerpo = "";
+                        }
                         break;
 
                     case "LISTOURCAM":
 
-                        String lcam = "LCAM";
                         cuerpoMensaje = messageFromClient.split("&");
                         tour = new Tour();
                         tour.setCodigo(Integer.parseInt(cuerpoMensaje[1]));
@@ -252,5 +338,39 @@ class Client extends Thread {
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public String longitudCuerpo(int longitud) {
+        String respuesta = "";
+
+        String aux = "" + longitud;
+        for (int i = 0; i < 4 - aux.length(); i++) {
+            respuesta += "0";
+        }
+        respuesta += longitud;
+
+        return respuesta;
+    }
+
+    public String getHash(String cuerpo, String hashType) {
+        try {
+            java.security.MessageDigest md = java.security.MessageDigest
+                    .getInstance(hashType);
+            byte[] array = md.digest(cuerpo.getBytes());
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < array.length; ++i) {
+                sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100)
+                        .substring(1, 3));
+            }
+            return sb.toString();
+        } catch (java.security.NoSuchAlgorithmException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    /* Retorna un hash MD5 a partir de un texto */
+    public String md5(String cuerpo) {
+        return getHash(cuerpo, "MD5");
     }
 }

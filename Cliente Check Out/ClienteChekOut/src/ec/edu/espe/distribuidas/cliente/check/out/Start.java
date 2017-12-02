@@ -22,9 +22,7 @@ public class Start {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-      //  Conexion conn = new Conexion();
         SolicitarFacturaFRM frm = new SolicitarFacturaFRM();
-       // conn.conectar();
         frm.setVisible(true);
     }
     }

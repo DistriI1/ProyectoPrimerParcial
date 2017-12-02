@@ -7,7 +7,7 @@
 		$fecha = date('Ymdhis');
 		$id_Mensaje = "REGCONSTUR";
 		$longitud = strlen($cuerpo);
-		$longitud = rellenar($longitud,strlen($longitud));
+		$longitud = "0000";
 		$hash = md5($cuerpo);
 
 		return $tipo . $originador.$fecha .$id_Mensaje.$longitud.$hash;

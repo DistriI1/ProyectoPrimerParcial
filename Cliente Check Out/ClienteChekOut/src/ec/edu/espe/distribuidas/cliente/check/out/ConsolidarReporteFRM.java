@@ -51,7 +51,7 @@ public class ConsolidarReporteFRM extends javax.swing.JFrame {
         btnBuscarReserva1 = new javax.swing.JButton();
         btnSalir = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        txtCodigoReserva = new javax.swing.JTextField();
+        txtCodigoTour = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
@@ -63,7 +63,7 @@ public class ConsolidarReporteFRM extends javax.swing.JFrame {
         getContentPane().setLayout(null);
 
         btnRegresar.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
-        btnRegresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/edu/espe/distribuidas/cliente/check/out/iconos/magnifier1.png"))); // NOI18N
+        btnRegresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/edu/espe/distribuidas/cliente/check/out/iconos/reply.png"))); // NOI18N
         btnRegresar.setText("Regresar");
         btnRegresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -99,24 +99,24 @@ public class ConsolidarReporteFRM extends javax.swing.JFrame {
         getContentPane().add(jLabel4);
         jLabel4.setBounds(140, 140, 170, 15);
 
-        txtCodigoReserva.setFont(new java.awt.Font("Trebuchet MS", 0, 10)); // NOI18N
-        txtCodigoReserva.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtCodigoReserva.setSelectionColor(new java.awt.Color(0, 153, 153));
-        txtCodigoReserva.addActionListener(new java.awt.event.ActionListener() {
+        txtCodigoTour.setFont(new java.awt.Font("Trebuchet MS", 0, 10)); // NOI18N
+        txtCodigoTour.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtCodigoTour.setSelectionColor(new java.awt.Color(0, 153, 153));
+        txtCodigoTour.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCodigoReservaActionPerformed(evt);
+                txtCodigoTourActionPerformed(evt);
             }
         });
-        txtCodigoReserva.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtCodigoTour.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtCodigoReservaKeyPressed(evt);
+                txtCodigoTourKeyPressed(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtCodigoReservaKeyTyped(evt);
+                txtCodigoTourKeyTyped(evt);
             }
         });
-        getContentPane().add(txtCodigoReserva);
-        txtCodigoReserva.setBounds(130, 160, 190, 30);
+        getContentPane().add(txtCodigoTour);
+        txtCodigoTour.setBounds(130, 160, 190, 30);
 
         jTable1.setFont(new java.awt.Font("Trebuchet MS", 0, 11)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -124,7 +124,7 @@ public class ConsolidarReporteFRM extends javax.swing.JFrame {
 
             },
             new String [] {
-                "CODIGO", "NOMBRE DEL TOUR", "TOTAL DE CONSUMOS"
+                "CODIGO", "NOMBRE TOUR", "TOTAL DE CONSUMOS"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -139,21 +139,21 @@ public class ConsolidarReporteFRM extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtCodigoReservaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoReservaKeyPressed
+    private void txtCodigoTourKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoTourKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCodigoReservaKeyPressed
+    }//GEN-LAST:event_txtCodigoTourKeyPressed
 
-    private void txtCodigoReservaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoReservaKeyTyped
+    private void txtCodigoTourKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoTourKeyTyped
         // TODO add your handling code here:
-        String Caracteres = txtCodigoReserva.getText(); 
+        String Caracteres = txtCodigoTour.getText(); 
         if(Caracteres.length()>=10){ 
             evt.consume(); 
         } 
-    }//GEN-LAST:event_txtCodigoReservaKeyTyped
+    }//GEN-LAST:event_txtCodigoTourKeyTyped
 
-    private void txtCodigoReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoReservaActionPerformed
+    private void txtCodigoTourActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoTourActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCodigoReservaActionPerformed
+    }//GEN-LAST:event_txtCodigoTourActionPerformed
 
     private void btnSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalirMouseClicked
         // TODO add your handling code here:
@@ -163,22 +163,28 @@ public class ConsolidarReporteFRM extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-         try{
-            String Codigo = "";
-            SocketCheckOut client = new SocketCheckOut();
-            client.connect();
-            Codigo = txtCodigoReserva.getText();
-            client.send(peticion.cabecera(Codigo));
-            JOptionPane.showMessageDialog(null, "Operación realizada correctamente " + peticion.cabecera(Codigo));
-            respuesta.recibirRespuesta("RPSERV20171122234559FACTCONCLI00083867994d1be6e111e067ac5dbf3ae3cOKK&150.30&4",jTable1,txtCodigoReserva);
-            
-        }catch(IOException e){
-         LOG.log(Level.SEVERE,"Ocurrio un error",e);
-        }
+        MenuFRM obj = new MenuFRM();
+         this.setVisible(false);
+         obj.setVisible(true);
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnBuscarReserva1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarReserva1ActionPerformed
         // TODO add your handling code here:
+        try{
+            String Codigo = "";
+            SocketCheckOut client = new SocketCheckOut();
+            client.connect();
+            Codigo = txtCodigoTour.getText();
+            client.send(peticion.cabecera(Codigo,"REPVENTOUR"));
+          
+            String message = client.read();
+          
+            respuesta.recibirRespuesta(message, jTable1, txtCodigoTour);
+            
+        }catch(IOException e){
+         LOG.log(Level.SEVERE,"Ocurrio un error",e);
+        }
+
     }//GEN-LAST:event_btnBuscarReserva1ActionPerformed
 
     /**
@@ -227,6 +233,6 @@ public class ConsolidarReporteFRM extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField txtCodigoReserva;
+    private javax.swing.JTextField txtCodigoTour;
     // End of variables declaration//GEN-END:variables
 }

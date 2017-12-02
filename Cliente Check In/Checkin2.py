@@ -33,14 +33,6 @@ def validate_date(date_text):
         return datetime.datetime.strptime(date_text.strip(), '%Y-%m-%d')
     except ValueError:
         return datetime.datetime.strptime(time.strftime('%Y-%m-%d'), '%Y-%m-%d')
-def validar_peso(tipo_tour, peso):
-    if (tipo_tour == 'TIT1' or tipo_tour == 'TIT2') and peso <= 25.0:
-        return True
-    elif (tipo_tour == 'TIT3') and peso <= 32.0:
-        return True
-    else:
-        print 'Peso excedido.'
-        return False
 def registro_maleta(skt):
     print ' '
     print '======================REGISTRO DE MALETAS=================================='
@@ -49,7 +41,7 @@ def registro_maleta(skt):
     try:
         envio_mensaje('LISTTURRES', cod_reserva, skt)
         #Recibe respuesta
-        mensaje_recibido=''
+        mensaje_recibido = ''
         mensaje_recibido = skt.recv(180) #Cuantos bytes?
         cabecera = mensaje_recibido[:66]
         cuerpo = mensaje_recibido[66:]
@@ -108,7 +100,7 @@ def registro_maleta(skt):
                     if resp == 'y' or resp == 'Y':
                         for j in range(0, len(turistas)):
                             envio_mensaje('REGPESOMAL', turistas[j].get_identificacion() + '&' + str(turistas[j].get_peso_maleta()), skt)
-                            mensaje_recibido =''
+                            mensaje_recibido = ''
                             mensaje_recibido = skt.recv(69) #Cuantos bytes?
                             cabecera = mensaje_recibido[:66]
                             cuerpo = mensaje_recibido[66:]
@@ -126,7 +118,7 @@ def registro_maleta(skt):
                                 print 'ERROR. Falla de integridad en la cadena.'
                     elif resp == 'n' or resp == 'N':
                         print '-------------'
-            elif cuerpo_partes[0] == 'BAD':
+            elif resultado == 'BAD':
                 print 'ERROR. Algo salio mal. Intente nuevamente.'
         else:
             print 'ERROR. Falla de integridad en la cadena.\n'

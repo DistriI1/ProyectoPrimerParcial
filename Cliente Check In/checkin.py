@@ -28,7 +28,67 @@ def validate_date(date_text):
         return datetime.datetime.strptime(date_text.strip(), '%Y-%m-%d')
     except ValueError:
         return datetime.datetime.strptime(time.strftime('%Y-%m-%d'), '%Y-%m-%d')
-
+def registro_maleta(skt):
+    print ' '
+    print '======================REGISTRO DE MALETAS=================================='
+    print 'Ingrese el codigo de reserva:'
+    cod_reserva = get_specific_input(10, False)
+    try:
+        envio_mensaje('LISTTURRES', cod_reserva,skt)
+        #Recibe respuesta
+        mensaje_recibido = skt.recv(180) #Cuantos bytes?
+        cabecera = mensaje_recibido[:66]
+        cuerpo = mensaje_recibido[66:]
+        mda = md5.new()
+        mda.update(cuerpo)
+        hashcode = mda.hexdigest()
+        print "Head>" + cabecera
+        print "Body>" + cuerpo
+        if hashcode == cabecera[34:]:
+            cuerpo_partes = cuerpo.split('|')
+            if cuerpo_partes[0] == 'OKK':
+                tipoTour = cuerpo_partes[1]
+                #identificacionTurista = identificaciones.split('|') #arrar identificaciones
+                print ' '
+                print '======================LISTADO DE TURISTAS=================================='
+                print ' > Reserva: ' + cod_reserva
+                if tipoTour == 'AVMAGIC':
+                    tipoTour = 'Aventura Magica'
+                elif tipoTour == 'AVEXTRE':
+                    tipoTour = 'Aventura Extrema'
+                elif tipoTour == 'AVIDEAL':
+                    tipoTour = 'Aventura Ideal'
+                print ' > Tipo Tour: '+ tipoTour
+                for i in range(2, len(cuerpo_partes) - 1):
+                    turista = cuerpo_partes[i]
+                    print " > Turista " + str(i-1) + ": " + turista
+                    print 'Ingrese el peso de la maleta:'
+                    peso = get_specific_input(5, True) #validar
+                    print 'Enviar cambios? (y/n):'
+                    resp = get_specific_input(1, False)
+                    if resp == 'y' or resp == 'Y':
+                        envio_mensaje('REGPESOMAL', turista + '|' + peso, skt)
+                        mensaje_recibido = skt.recv(69) #Cuantos bytes?
+                        cabecera = mensaje_recibido[:66]
+                        cuerpo = mensaje_recibido[66:]
+                        mda = md5.new()
+                        mda.update(cuerpo)
+                        hashcode = mda.hexdigest()
+                        if hashcode == cabecera[34:]:
+                            if cuerpo == 'OKK':
+                                print 'Cambios guardados.'
+                            elif cuerpo == 'BAD':
+                                print 'ERROR. Algo salio mal. Intente nuevamente.'
+                        else:
+                            print 'ERROR. Falla de integridad en la cadena.\n'
+                    elif resp == 'n' or resp == 'N':
+                        break
+            elif cuerpo_partes[0] == 'BAD':
+                print 'ERROR. Algo salio mal. Intente nuevamente.'     
+        else:
+            print 'ERROR. Falla de integridad en la cadena.\n'
+    finally:
+        print '================================================================================'
 def envio_mensaje(id, cuerpo, skt):
     tipo_mensaje = 'RQ'
     originador = 'CHIN'

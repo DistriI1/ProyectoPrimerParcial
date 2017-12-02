@@ -15,7 +15,7 @@ import java.util.Date;
  * @author joel
  */
 public class Reserva {
-    
+
     private String codigo;
     private String identificacion;
     private String tipoIdentificacion;
@@ -141,9 +141,9 @@ public class Reserva {
 
     public void setEstado(String estado) {
         this.estado = estado;
-    }    
-    
-        public boolean registrarCliente() {
+    }
+
+    public boolean registrarCliente() {
 
         Conexion cn = new Conexion();
         boolean bandera = true;

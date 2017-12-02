@@ -6,6 +6,8 @@
 package ec.edu.espe.distribuidas.servidorHades.model;
 
 import java.math.BigDecimal;
+import java.sql.CallableStatement;
+import java.sql.SQLException;
 import java.util.Date;
 
 /**
@@ -13,7 +15,7 @@ import java.util.Date;
  * @author joel
  */
 public class TuristaReserva {
-    
+
     private Integer codigo;
     private String codigoreserva;
     private String tipoIdentificacion;
@@ -89,5 +91,43 @@ public class TuristaReserva {
 
     public void setPesoMaleta(BigDecimal pesoMaleta) {
         this.pesoMaleta = pesoMaleta;
-    }    
+    }
+
+    public boolean registrarTurista() {
+
+        Conexion cn = new Conexion();
+        boolean bandera = true;
+
+        try {
+            // Carga el driver de oracle
+            cn.conectar();
+
+            // Llamada al procedimiento almacenado
+            CallableStatement cst = cn.prepareCall("{call ingresoTurista (?,?,?,?,?,?,?,?)}");
+
+            //Seteo los valores
+            cst.setInt(1, codigo);
+            cst.setString(2, tipoIdentificacion);
+            cst.setString(3, identificacion);
+            cst.setString(4, nombre);
+            cst.setDate(5, (java.sql.Date) fechaNacimiento);
+            System.out.println("Valores seteados");
+            cst.execute();
+
+            System.out.println("procedure ejecutado");
+
+            cst.close();
+
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage());
+            bandera = false;
+        } finally {
+            try {
+                cn.close();
+            } catch (SQLException ex) {
+                System.out.println("Error: " + ex.getMessage());
+            }
+        }
+        return bandera;
+    }
 }

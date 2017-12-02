@@ -161,12 +161,13 @@ public class Tour {
             ResultSet rset = (ResultSet)cst.getObject (2);
             // Dump the cursor
             while (rset.next ()){
-                String[] tipo  = new String[5];
+                String[] tipo  = new String[6];
                 tipo[0] = rset.getString("COD_TOUR");
                 tipo[1] = rset.getString("NOMBRE");
                 tipo[2] = rset.getString("DURACION");
                 tipo[3] = rset.getString("FECHA_INICIO");
                 tipo[4] = rset.getString("PRECIO_BASE");
+                tipo[5] = rset.getString("COD_CRUCERO");
                 listado.add(tipo);
             }
             

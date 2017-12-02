@@ -143,12 +143,12 @@ public class TuristaReserva {
             cn.conectar();
 
             // Llamada al procedimiento almacenado
-            CallableStatement cst = cn.prepareCall("{call codigoReserva (?,?,?)}");
+            CallableStatement cst = cn.prepareCall("{call ingresoMaleta (?,?,?)}");
 
             //Seteo los valores
             cst.setString(1, codigoreserva);
             cst.setString(2, identificacion);
-            cst.setString(2, pesoMaleta);
+            cst.setString(3, pesoMaleta);
             
             System.out.println("Valores seteados");
             cst.execute();

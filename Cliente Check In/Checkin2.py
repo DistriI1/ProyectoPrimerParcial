@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #enconding: utf-8
 '''
-Chec-In
+Check-In
 '''
 import socket
 import sys
@@ -34,7 +34,7 @@ def validate_date(date_text):
     except ValueError:
         return datetime.datetime.strptime(time.strftime('%Y-%m-%d'), '%Y-%m-%d')
 def validar_peso(tipo_tour, peso):
-    if(tipo_tour == 'TIT1' or tipo_tour == 'TIT2') and peso <= 25.0:
+    if (tipo_tour == 'TIT1' or tipo_tour == 'TIT2') and peso <= 25.0:
         return True
     elif (tipo_tour == 'TIT3') and peso <= 32.0:
         return True
@@ -49,6 +49,7 @@ def registro_maleta(skt):
     try:
         envio_mensaje('LISTTURRES', cod_reserva, skt)
         #Recibe respuesta
+        mensaje_recibido=''
         mensaje_recibido = skt.recv(180) #Cuantos bytes?
         cabecera = mensaje_recibido[:66]
         cuerpo = mensaje_recibido[66:]
@@ -77,8 +78,8 @@ def registro_maleta(skt):
                 peso_total = 0
                 peso_max_mi = 25
                 peso_max_ex = 32
-                print "cuepo_partes" +str(len(cuerpo_partes))
-                for i in range(0, len(cuerpo_partes)):
+                print "cuepo_partes" +str(len(cuerpo_partes)-1)
+                for i in range(0, len(cuerpo_partes)-1):
                     turis = Turista.Turista()
                     turis.identificacion = cuerpo_partes[i]
                     turistas.append(turis)
@@ -106,13 +107,16 @@ def registro_maleta(skt):
                     resp = get_specific_input(1, 'var')
                     if resp == 'y' or resp == 'Y':
                         for j in range(0, len(turistas)):
-                            envio_mensaje('REGPESOMAL', turistas[j].get_identificacion() + '|' + str(turistas[j].get_peso_maleta()), skt)
+                            envio_mensaje('REGPESOMAL', turistas[j].get_identificacion() + '&' + str(turistas[j].get_peso_maleta()), skt)
+                            mensaje_recibido =''
                             mensaje_recibido = skt.recv(69) #Cuantos bytes?
                             cabecera = mensaje_recibido[:66]
                             cuerpo = mensaje_recibido[66:]
                             mda = md5.new()
                             mda.update(cuerpo)
                             hashcode = mda.hexdigest()
+                            print "Head>" + cabecera
+                            print "Body>" + cuerpo
                             if hashcode == cabecera[34:]:
                                 if cuerpo == 'OKK':
                                     print 'Cambios guardados. Turista ' + str(j+1)
@@ -120,7 +124,6 @@ def registro_maleta(skt):
                                     print 'ERROR. Algo salio mal. Intente nuevamente.'
                             else:
                                 print 'ERROR. Falla de integridad en la cadena.'
-                        print 'Enviado.'
                     elif resp == 'n' or resp == 'N':
                         print '-------------'
             elif cuerpo_partes[0] == 'BAD':
@@ -140,11 +143,11 @@ def envio_mensaje(ide, cuerpo, skt):
     cabecera = tipo_mensaje + originador + fecha_mensaje + ide + ('000' if cuerpo_length < 10 else ('00' if cuerpo_length < 100 else ('0' if cuerpo_length < 1000 else ''))) + str(cuerpo_length) + hash_cuerpo
     mensaje = cabecera + cuerpo
     print mensaje
-    skt.send(mensaje)
+    skt.sendall(mensaje+'\n')
 def main():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    ip = 'localhost'
-    puerto = 2000
+    ip = '192.168.1.5'
+    puerto = 2001
     server_address = (ip, puerto)
     print >> sys.stderr, 'Conectando a %s por el puerto %s' % server_address
     sock.connect(server_address)

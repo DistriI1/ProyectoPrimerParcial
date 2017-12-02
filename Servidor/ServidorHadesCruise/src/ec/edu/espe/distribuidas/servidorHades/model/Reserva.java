@@ -6,6 +6,8 @@
 package ec.edu.espe.distribuidas.servidorHades.model;
 
 import java.math.BigDecimal;
+import java.sql.CallableStatement;
+import java.sql.SQLException;
 import java.util.Date;
 
 /**
@@ -140,4 +142,48 @@ public class Reserva {
     public void setEstado(String estado) {
         this.estado = estado;
     }    
+    
+        public boolean registrarCliente() {
+
+        Conexion cn = new Conexion();
+        boolean bandera = true;
+
+        try {
+            // Carga el driver de oracle
+            cn.conectar();
+
+            // Llamada al procedimiento almacenado
+            CallableStatement cst = cn.prepareCall("{call ingresoCliente (?,?,?,?,?,?,?,?)}");
+
+            //Seteo los valores
+            cst.setString(1, codigo);
+            cst.setString(2, identificacion);
+            cst.setString(3, tipoIdentificacion);
+            cst.setString(4, codigoTipoTour);
+            cst.setInt(5, codigoCrucero);
+            cst.setInt(6, codigoCamarote);
+            cst.setString(7, codigoTipoCamarote);
+            cst.setString(8, codigoTipoAlimentacion);
+            cst.setBigDecimal(9, valorFinal);
+            cst.setDate(9, (java.sql.Date) fechaEmision);
+            cst.setString(10, estado);
+            System.out.println("Valores seteados");
+            cst.execute();
+
+            System.out.println("procedure ejecutado");
+
+            cst.close();
+
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage());
+            bandera = false;
+        } finally {
+            try {
+                cn.close();
+            } catch (SQLException ex) {
+                System.out.println("Error: " + ex.getMessage());
+            }
+        }
+        return bandera;
+    }
 }

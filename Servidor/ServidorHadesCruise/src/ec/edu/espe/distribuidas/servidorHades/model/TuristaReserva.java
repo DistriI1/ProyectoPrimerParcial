@@ -133,4 +133,40 @@ public class TuristaReserva {
         return bandera;
     }
 
+    public boolean registrarMaleta() {
+
+        Conexion cn = new Conexion();
+        boolean bandera = true;
+
+        try {
+            // Carga el driver de oracle
+            cn.conectar();
+
+            // Llamada al procedimiento almacenado
+            CallableStatement cst = cn.prepareCall("{call codigoReserva (?,?,?)}");
+
+            //Seteo los valores
+            cst.setString(1, codigoreserva);
+            cst.setString(2, identificacion);
+            cst.setString(2, pesoMaleta);
+            
+            System.out.println("Valores seteados");
+            cst.execute();
+
+            System.out.println("procedure ejecutado");
+
+            cst.close();
+
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage());
+            bandera = false;
+        } finally {
+            try {
+                cn.close();
+            } catch (SQLException ex) {
+                System.out.println("Error: " + ex.getMessage());
+            }
+        }
+        return bandera;
+    }
 }

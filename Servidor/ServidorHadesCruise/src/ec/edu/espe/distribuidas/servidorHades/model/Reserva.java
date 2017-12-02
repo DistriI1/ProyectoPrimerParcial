@@ -32,6 +32,24 @@ public class Reserva {
     private String valorFinal;
     private Date fechaEmision;
     private String estado;
+    private String nombreTour;
+    private BigDecimal totalConsumos;
+
+    public BigDecimal getTotalConsumos() {
+        return totalConsumos;
+    }
+
+    public void setTotalConsumos(BigDecimal totalConsumos) {
+        this.totalConsumos = totalConsumos;
+    }
+
+    public String getNombreTour() {
+        return nombreTour;
+    }
+
+    public void setNombreTour(String nombreTour) {
+        this.nombreTour = nombreTour;
+    }
     
     private BigDecimal totalConsumo;
     private Integer recargo;
@@ -255,7 +273,43 @@ public class Reserva {
         
         return bandera;
     }
-    public boolean factura() {
+    public boolean reporteConsolidado() {
+        Conexion cn = new Conexion();
+        boolean bandera = true;
+        try {
+            // Carga el driver de oracle
+            cn.conectar();
+           
+            // Llamada al procedimiento almacenado
+            CallableStatement cst = cn.prepareCall("{call reporteConsolidado (?,?,?)}");
+
+               cst.setInt(1, codigoTour);
+                // Definimos los tipos de los parametros de salida del procedimiento almacenado
+                cst.registerOutParameter(2, java.sql.Types.DECIMAL);
+                cst.registerOutParameter(3, java.sql.Types.VARCHAR);
+                // Ejecuta el procedimiento almacenado
+                cst.execute();
+                
+                // Se obtienen la salida del procedimineto almacenado
+                totalConsumos = cst.getBigDecimal(2);
+                nombreTour = cst.getString(3);
+
+            
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage());
+            bandera=false;
+        } finally {
+            try {
+                cn.close();
+            } catch (SQLException ex) {
+                System.out.println("Error: " + ex.getMessage());
+            }
+        }
+        
+        return bandera;
+    }    
+    
+       public boolean factura() {
         Conexion cn = new Conexion();
         boolean bandera = true;
         try {
@@ -273,7 +327,7 @@ public class Reserva {
                 cst.execute();
                 
                 // Se obtienen la salida del procedimineto almacenado
-                totalConsumo = cst.getBigDecimal(2);
+                totalConsumos = cst.getBigDecimal(2);
                 recargo = cst.getInt(3);
 
             
@@ -289,6 +343,7 @@ public class Reserva {
         }
         
         return bandera;
-    }    
+    } 
         
+    
 }

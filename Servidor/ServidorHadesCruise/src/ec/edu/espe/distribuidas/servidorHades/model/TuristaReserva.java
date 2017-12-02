@@ -23,13 +23,13 @@ public class TuristaReserva {
     private String tipoIdentificacion;
     private String identificacion;
     private String nombre;
-    private Date fechaNacimiento;
+    private String fechaNacimiento;
     private String pesoMaleta;
 
     public TuristaReserva() {
     }
 
-    public TuristaReserva(Integer codigo, String codigoreserva, String tipoIdentificacion, String identificacion, String nombre, Date fechaNacimiento, String pesoMaleta) {
+    public TuristaReserva(Integer codigo, String codigoreserva, String tipoIdentificacion, String identificacion, String nombre, String fechaNacimiento, String pesoMaleta) {
         this.codigo = codigo;
         this.codigoreserva = codigoreserva;
         this.tipoIdentificacion = tipoIdentificacion;
@@ -79,11 +79,11 @@ public class TuristaReserva {
         this.nombre = nombre;
     }
 
-    public Date getFechaNacimiento() {
+    public String getFechaNacimiento() {
         return fechaNacimiento;
     }
 
-    public void setFechaNacimiento(Date fechaNacimiento) {
+    public void setFechaNacimiento(String fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 
@@ -105,14 +105,14 @@ public class TuristaReserva {
             cn.conectar();
 
             // Llamada al procedimiento almacenado
-            CallableStatement cst = cn.prepareCall("{call ingresoTurista (?,?,?,?,?,?,?,?)}");
+            CallableStatement cst = cn.prepareCall("{call ingresoTurista (?,?,?,?,?)}");
 
             //Seteo los valores
-            cst.setInt(1, codigo);
+            cst.setString(1, codigoreserva);
             cst.setString(2, tipoIdentificacion);
             cst.setString(3, identificacion);
             cst.setString(4, nombre);
-            cst.setDate(5, (java.sql.Date) fechaNacimiento);
+            cst.setString(5, fechaNacimiento);
             System.out.println("Valores seteados");
             cst.execute();
 

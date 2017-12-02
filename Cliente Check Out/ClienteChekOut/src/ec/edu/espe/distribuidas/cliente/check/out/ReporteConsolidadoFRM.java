@@ -30,7 +30,8 @@ public class ReporteConsolidadoFRM extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
     }
-    SocketCheckOut sock = new SocketCheckOut();
+    private Peticion peticion= new Peticion();
+    private Respuesta respuesta = new Respuesta();
     private static final Logger LOG = Logger.getLogger(Start.class.getName());
     private static final char[] CONSTS_HEX = { '0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f' };
     public String longitudCuerpo(String longitud){
@@ -152,12 +153,10 @@ public class ReporteConsolidadoFRM extends javax.swing.JFrame {
 
         btnSalir = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         btnBuscarR = new javax.swing.JLabel();
-        txtCodigoReserva = new javax.swing.JTextField();
+        txtCodigoTour = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
@@ -184,19 +183,6 @@ public class ReporteConsolidadoFRM extends javax.swing.JFrame {
         getContentPane().add(jLabel1);
         jLabel1.setBounds(10, 10, 140, 15);
 
-        jLabel7.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/edu/espe/distribuidas/cliente/check/out/iconos/back.png"))); // NOI18N
-        jLabel7.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        getContentPane().add(jLabel7);
-        jLabel7.setBounds(330, 0, 40, 30);
-
-        jLabel5.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Regresar");
-        getContentPane().add(jLabel5);
-        jLabel5.setBounds(270, 0, 50, 30);
-
         jLabel4.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Ingrese el codigo del Tour");
@@ -220,24 +206,24 @@ public class ReporteConsolidadoFRM extends javax.swing.JFrame {
         getContentPane().add(btnBuscarR);
         btnBuscarR.setBounds(290, 120, 30, 30);
 
-        txtCodigoReserva.setFont(new java.awt.Font("Trebuchet MS", 0, 10)); // NOI18N
-        txtCodigoReserva.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtCodigoReserva.setSelectionColor(new java.awt.Color(0, 153, 153));
-        txtCodigoReserva.addActionListener(new java.awt.event.ActionListener() {
+        txtCodigoTour.setFont(new java.awt.Font("Trebuchet MS", 0, 10)); // NOI18N
+        txtCodigoTour.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtCodigoTour.setSelectionColor(new java.awt.Color(0, 153, 153));
+        txtCodigoTour.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCodigoReservaActionPerformed(evt);
+                txtCodigoTourActionPerformed(evt);
             }
         });
-        txtCodigoReserva.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtCodigoTour.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtCodigoReservaKeyPressed(evt);
+                txtCodigoTourKeyPressed(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtCodigoReservaKeyTyped(evt);
+                txtCodigoTourKeyTyped(evt);
             }
         });
-        getContentPane().add(txtCodigoReserva);
-        txtCodigoReserva.setBounds(130, 120, 190, 30);
+        getContentPane().add(txtCodigoTour);
+        txtCodigoTour.setBounds(130, 120, 190, 30);
 
         jTable1.setFont(new java.awt.Font("Trebuchet MS", 0, 11)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -263,21 +249,21 @@ public class ReporteConsolidadoFRM extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtCodigoReservaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoReservaKeyPressed
+    private void txtCodigoTourKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoTourKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCodigoReservaKeyPressed
+    }//GEN-LAST:event_txtCodigoTourKeyPressed
 
-    private void txtCodigoReservaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoReservaKeyTyped
+    private void txtCodigoTourKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoTourKeyTyped
         // TODO add your handling code here:
-        String Caracteres = txtCodigoReserva.getText(); 
+        String Caracteres = txtCodigoTour.getText(); 
         if(Caracteres.length()>=10){ 
             evt.consume(); 
         } 
-    }//GEN-LAST:event_txtCodigoReservaKeyTyped
+    }//GEN-LAST:event_txtCodigoTourKeyTyped
 
-    private void txtCodigoReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoReservaActionPerformed
+    private void txtCodigoTourActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoTourActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCodigoReservaActionPerformed
+    }//GEN-LAST:event_txtCodigoTourActionPerformed
 
     private void btnSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalirMouseClicked
         // TODO add your handling code here:
@@ -289,15 +275,12 @@ public class ReporteConsolidadoFRM extends javax.swing.JFrame {
         // TODO add your handling code here:
         String Codigo = "";
         try{
-            String server= "192.168.1.114";
-            Integer port=2000;
-            SocketCheckOut client = new SocketCheckOut(server, port);
+            SocketCheckOut client = new SocketCheckOut();
             client.connect();
-            Codigo = txtCodigoReserva.getText();
-           // client.send(cabecera(Codigo));
+            Codigo = txtCodigoTour.getText();
+            client.send(peticion.cabecera(Codigo));
             JOptionPane.showMessageDialog(null, "Operación realizada correctamente " + cabecera(Codigo));
-            recibirRespuesta("RPSERV20171122234559FACTCONCLI00083867994d1be6e111e067ac5dbf3ae3cOKK&");
-          //  recibirRespuesta(cabecera(Codigo));
+            respuesta.recibirRespuesta("RPSERV20171122234559FACTCONCLI00083867994d1be6e111e067ac5dbf3ae3cOKK&",jTable1,txtCodigoTour);
             
         }catch(IOException e){
          LOG.log(Level.SEVERE,"Ocurrio un error",e);
@@ -349,10 +332,8 @@ public class ReporteConsolidadoFRM extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField txtCodigoReserva;
+    private javax.swing.JTextField txtCodigoTour;
     // End of variables declaration//GEN-END:variables
 }

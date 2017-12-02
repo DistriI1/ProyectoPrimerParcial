@@ -17,16 +17,13 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author toshiba
+ * @author
  */
 public class SocketCheckOut {
 
     private static final Logger LOG = Logger.getLogger(SocketCheckOut.class.getName());
-    
-    
-    
-    private String server; 
-    private Integer port;
+    private String server = "192.168.1.109"; 
+    private Integer port = 2000;
     private Socket client;
     private BufferedWriter oos =null;
     private BufferedReader ois =null;

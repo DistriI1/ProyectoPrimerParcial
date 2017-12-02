@@ -5,6 +5,7 @@
  */
 package ec.edu.espe.distribuidas.servidorHades;
 
+import ec.edu.espe.distribuidas.servidorHades.model.Camarote;
 import ec.edu.espe.distribuidas.servidorHades.model.Tour;
 import ec.edu.espe.distribuidas.servidorHades.model.Cliente;
 import ec.edu.espe.distribuidas.servidorHades.model.Consumo;
@@ -95,6 +96,7 @@ class Client extends Thread {
             Consumo consumo;
             Date fechaTemp;
             Crucero crucero;
+            Camarote camarote;
             String codigoReserva = "";
 
             while (true) {
@@ -412,7 +414,7 @@ class Client extends Thread {
                         turistaReserva.setIdentificacion(cuerpoMensaje[0].substring(66));
                         turistaReserva.setPesoMaleta(cuerpoMensaje[1]);
                       
-                        if (turistaReserva.registrarTurista()) {
+                        if (turistaReserva.registrarMaleta()) {
                             cuerpo += "OKK";
                             cabeza += "RPSERV";
                             cabeza += fecha.obtenerFecha() + idMensaje + longitudCuerpo(cuerpo.length()) + md5(cuerpo);
@@ -435,10 +437,11 @@ class Client extends Thread {
 
                         reserva = new Reserva();
                         consumo = new Consumo();
+                        camarote = new Camarote();
                         fechaTemp = new Date();
                         cuerpoMensaje = messageFromClient.split("&");
                         reserva.setCodigoTour(Integer.parseInt(cuerpoMensaje[0].substring(66)));
-                        reserva.setCodigoCamarote(Integer.parseInt(cuerpoMensaje[1]));
+                        camarote.setNumero(Integer.parseInt(cuerpoMensaje[1]));
                         consumo.setCodigoItem(Integer.parseInt(cuerpoMensaje[2]));
                         consumo.setCantidad(Integer.parseInt(cuerpoMensaje[3]));
                         consumo.setReferencia(cuerpoMensaje[4]);
@@ -446,7 +449,25 @@ class Client extends Thread {
                         fechaTemp.setMonth(Integer.parseInt(cuerpoMensaje[5].substring(4, 5)));
                         fechaTemp.setYear(Integer.parseInt(cuerpoMensaje[5].substring(6, 7)));
                         consumo.setFecha(fechaTemp);
-                        consumo.setValor(new BigDecimal(cuerpoMensaje[6]));
+                        consumo.setValor(cuerpoMensaje[6]);
+                        
+                        if (consumo.registrarMaleta()) {
+                            cuerpo += "OKK";
+                            cabeza += "RPSERV";
+                            cabeza += fecha.obtenerFecha() + idMensaje + longitudCuerpo(cuerpo.length()) + md5(cuerpo);
+                            out.println(cabeza + cuerpo);
+                            out.flush();
+                            cabeza = "";
+                            cuerpo = "";
+                        } else {
+                            cuerpo += "BAD";
+                            cabeza += "RPSERV";
+                            cabeza += fecha.obtenerFecha() + idMensaje + longitudCuerpo(cuerpo.length()) + md5(cuerpo);
+                            out.println(cabeza + cuerpo);
+                            out.flush();
+                            cabeza = "";
+                            cuerpo = "";
+                        } 
                         break;
 
                     case "FACTCONCLI":

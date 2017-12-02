@@ -249,7 +249,6 @@ class Client extends Thread {
 
                     case "LISTOURCAM":
 
-                        String lcam = "LCAM";
                         cuerpoMensaje = messageFromClient.split("&");
                         tour = new Tour();
                         tour.setCodigo(Integer.parseInt(cuerpoMensaje[1]));

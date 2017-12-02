@@ -7,8 +7,12 @@ package ec.edu.espe.distribuidas.servidorHades.model;
 
 import java.math.BigDecimal;
 import java.sql.CallableStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import oracle.jdbc.OracleTypes;
 
 /**
  *
@@ -29,6 +33,16 @@ public class Reserva {
     private Date fechaEmision;
     private String estado;
 
+    private List<String[]> listado = new ArrayList<>();
+
+    public List<String[]> getListado() {
+        return listado;
+    }
+
+    public void setListado(List<String[]> listado) {
+        this.listado = listado;
+    }
+    
     public Reserva() {
     }
 
@@ -180,6 +194,51 @@ public class Reserva {
                 System.out.println("Error: " + ex.getMessage());
             }
         }
+        return bandera;
+    }
+    
+        public boolean listadoTuristas() {
+        Conexion cn = new Conexion();
+        boolean bandera = true ;
+
+        try {
+
+            cn.conectar();
+            CallableStatement cst = cn.prepareCall("{call listadoTuristas (?,?,?)}");
+
+            //Creo un cursor
+            cst.setString(1, codigo);
+            cst.registerOutParameter(2, OracleTypes.CURSOR);
+            cst.registerOutParameter(3, java.sql.Types.VARCHAR);
+            cst.execute();
+            
+            ResultSet rset = (ResultSet) cst.getObject(2);
+
+            // Dump the cursor
+            while (rset.next()) {
+                String[] tipo = new String[4];
+                tipo[0] = rset.getString("COD_TIPO_ALIMENTACION");
+                tipo[1] = rset.getString("DESCRIPCION");
+                listado.add(tipo);
+            }
+            codigoTipoTour = cst.getString(2);
+
+            // Cierro todos los recursos
+            rset.close();
+            cst.close();
+            cst.close();
+
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage());
+            bandera=false;
+        } finally {
+            try {
+                cn.close();
+            } catch (SQLException ex) {
+                System.out.println("Error: " + ex.getMessage());
+            }
+        }
+        
         return bandera;
     }
 }

@@ -7,8 +7,10 @@ package ec.edu.espe.distribuidas.servidorHades.model;
 
 import java.math.BigDecimal;
 import java.sql.CallableStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
+import oracle.jdbc.OracleTypes;
 
 /**
  *
@@ -130,4 +132,5 @@ public class TuristaReserva {
         }
         return bandera;
     }
+
 }

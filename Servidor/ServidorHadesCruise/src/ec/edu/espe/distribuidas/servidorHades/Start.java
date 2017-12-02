@@ -23,6 +23,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -82,6 +84,7 @@ class Client extends Thread {
 
         try {
             String respuesta = "";
+            String fechaInicial = "";
             Fecha fecha = new Fecha();
             String cabeza = "";
             String cuerpo = "";
@@ -342,16 +345,16 @@ class Client extends Thread {
                     case "REGTURISTA":
 
                         turistaReserva = new TuristaReserva();
+                        fechaInicial = "";
                         cuerpoMensaje = messageFromClient.split("&");
                         turistaReserva.setCodigoreserva(cuerpoMensaje[0].substring(66));
                         turistaReserva.setTipoIdentificacion(cuerpoMensaje[1]);
                         turistaReserva.setIdentificacion(cuerpoMensaje[2]);
                         turistaReserva.setNombre(cuerpoMensaje[3]);
-                        fechaTemp = new Date();
-                        fechaTemp.setYear(Integer.parseInt(cuerpoMensaje[4].substring(0, 3)));
-                        fechaTemp.setMonth(Integer.parseInt(cuerpoMensaje[4].substring(4, 5)));
-                        fechaTemp.setMonth(Integer.parseInt(cuerpoMensaje[4].substring(6, 7)));
-                        turistaReserva.setFechaNacimiento(fechaTemp);
+                        fechaInicial += (cuerpoMensaje[4].substring(6, 8)) + "/";
+                        fechaInicial += (cuerpoMensaje[4].substring(4, 6)) + "/";
+                        fechaInicial += (cuerpoMensaje[4].substring(0, 4));
+                        turistaReserva.setFechaNacimiento(fechaInicial);
 
                         if (turistaReserva.registrarTurista()) {
                             cuerpo += "OKK";
@@ -413,7 +416,7 @@ class Client extends Thread {
                         turistaReserva.setCodigoreserva(codigoReserva);
                         turistaReserva.setIdentificacion(cuerpoMensaje[0].substring(66));
                         turistaReserva.setPesoMaleta(cuerpoMensaje[1]);
-                      
+
                         if (turistaReserva.registrarMaleta()) {
                             cuerpo += "OKK";
                             cabeza += "RPSERV";
@@ -430,7 +433,7 @@ class Client extends Thread {
                             out.flush();
                             cabeza = "";
                             cuerpo = "";
-                        }                        
+                        }
                         break;
 
                     case "REGCONSTUR":
@@ -439,19 +442,20 @@ class Client extends Thread {
                         consumo = new Consumo();
                         camarote = new Camarote();
                         fechaTemp = new Date();
+                        fechaInicial = "";
                         cuerpoMensaje = messageFromClient.split("&");
                         reserva.setCodigoTour(Integer.parseInt(cuerpoMensaje[0].substring(66)));
                         camarote.setNumero(Integer.parseInt(cuerpoMensaje[1]));
                         consumo.setCodigoItem(Integer.parseInt(cuerpoMensaje[2]));
                         consumo.setCantidad(Integer.parseInt(cuerpoMensaje[3]));
                         consumo.setReferencia(cuerpoMensaje[4]);
-                        fechaTemp.setYear(Integer.parseInt(cuerpoMensaje[5].substring(0, 3)));
-                        fechaTemp.setMonth(Integer.parseInt(cuerpoMensaje[5].substring(4, 5)));
-                        fechaTemp.setYear(Integer.parseInt(cuerpoMensaje[5].substring(6, 7)));
-                        consumo.setFecha(fechaTemp);
-                        consumo.setValor(cuerpoMensaje[6]);
-                        
-                        if (consumo.registrarMaleta()) {
+                        fechaInicial += (cuerpoMensaje[5].substring(6, 8)) + "/";
+                        fechaInicial += (cuerpoMensaje[5].substring(4, 6)) + "/";
+                        fechaInicial += (cuerpoMensaje[5].substring(0, 4));
+                        consumo.setFecha(fechaInicial);
+                        consumo.setValor(new BigDecimal(cuerpoMensaje[6]));
+
+                        if (consumo.registroConsumo(reserva.getCodigoTour(), camarote.getNumero())) {
                             cuerpo += "OKK";
                             cabeza += "RPSERV";
                             cabeza += fecha.obtenerFecha() + idMensaje + longitudCuerpo(cuerpo.length()) + md5(cuerpo);
@@ -467,13 +471,41 @@ class Client extends Thread {
                             out.flush();
                             cabeza = "";
                             cuerpo = "";
-                        } 
+                        }
                         break;
 
                     case "FACTCONCLI":
 
                         reserva = new Reserva();
                         reserva.setCodigo(messageFromClient.substring(66));
+
+                        if (reserva.listadoTuristas()) {
+                            List<String[]> listado = new ArrayList<>();
+                            listado = reserva.getListado();
+                            cuerpo += "OKK";
+                            cuerpo += reserva.getCodigoTipoTour();
+                            for (int i = 0; i < listado.size(); i++) {
+                                cuerpo += Arrays.toString(listado.get(i)).replace(", ", "&");
+                                cuerpo += "|";
+                            }
+                            cuerpo = cuerpo.replace("[", "");
+                            cuerpo = cuerpo.replace("]", "");
+                            cabeza += "RPSERV";
+                            cabeza += fecha.obtenerFecha() + idMensaje + longitudCuerpo(cuerpo.length()) + md5(cuerpo);
+                            out.println(cabeza + cuerpo);
+                            out.flush();
+                            cabeza = "";
+                            cuerpo = "";
+                        } else {
+                            cuerpo += "BAD";
+                            cabeza += "RPSERV";
+                            cabeza += fecha.obtenerFecha() + idMensaje + longitudCuerpo(cuerpo.length()) + md5(cuerpo);
+                            out.println(cabeza + cuerpo);
+                            out.flush();
+                            cabeza = "";
+                            cuerpo = "";
+                        }
+
                         break;
 
                     case "REPVENTOUR":

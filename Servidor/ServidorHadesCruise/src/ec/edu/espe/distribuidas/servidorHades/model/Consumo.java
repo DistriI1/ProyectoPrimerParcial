@@ -20,13 +20,13 @@ public class Consumo {
     private String codigoReserva;
     private Integer cantidad;
     private BigDecimal valor;
-    private Date fecha;
+    private String fecha;
     private String referencia;
 
     public Consumo() {
     }
 
-    public Consumo(Integer codigoItem, String codigoReserva, Integer cantidad, BigDecimal valor, Date fecha, String referencia) {
+    public Consumo(Integer codigoItem, String codigoReserva, Integer cantidad, BigDecimal valor, String fecha, String referencia) {
         this.codigoItem = codigoItem;
         this.codigoReserva = codigoReserva;
         this.cantidad = cantidad;
@@ -67,11 +67,11 @@ public class Consumo {
         this.valor = valor;
     }
 
-    public Date getFecha() {
+    public String getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(String fecha) {
         this.fecha = fecha;
     }
 
@@ -97,7 +97,7 @@ public class Consumo {
             cst.setInt(3, codigoItem);
             cst.setInt(4, cantidad);
             cst.setString(5, referencia);
-            cst.setDate(6, (java.sql.Date) fecha);
+            cst.setString(6, fecha);
             cst.setString(7, valor.toString());
 
             

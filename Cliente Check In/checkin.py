@@ -9,7 +9,7 @@ def get_specific_input(valid_length, datatype):
     resp=None
     prompt=' -> '# muestra > mientras espera input
     if (datatype == 'int'):
-        resp = get_input(prompt,lambda x:x.isdigit(),"Maximo "+str(valid_length)+" caracteres numericos",valid_length)   #lambda funcion en una sola linea, : para retornar
+        resp = get_input(prompt, lambda x:x.isdigit(), "Maximo "+str(valid_length)+" caracteres numericos", valid_length)   #lambda funcion en una sola linea, : para retornar
         #resp = resp.rjust(valid_length,' ')    #rjust para completar la longitud de un string con cualquier caracter
     elif (datatype == 'dec'): #int and dec
         resp = get_input(prompt, lambda x:not x.isalnum(), "Maximo "+str(valid_length)+" caracteres numericos dec",valid_length)

@@ -16,6 +16,8 @@ public class MenuFRM extends javax.swing.JFrame {
      */
     public MenuFRM() {
         initComponents();
+        this.setLocationRelativeTo(null);
+        
     }
 
     /**
@@ -27,52 +29,56 @@ public class MenuFRM extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel4 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         btnReporteConsolidado = new javax.swing.JButton();
         btnSolicitarFactura = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(434, 538));
-        setMinimumSize(new java.awt.Dimension(434, 538));
-        setPreferredSize(new java.awt.Dimension(434, 538));
+        setMaximumSize(new java.awt.Dimension(434, 565));
+        setMinimumSize(new java.awt.Dimension(434, 565));
+        setPreferredSize(new java.awt.Dimension(434, 565));
         getContentPane().setLayout(null);
-
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/edu/espe/distribuidas/cliente/check/out/iconos/error2.png"))); // NOI18N
-        jLabel4.setAlignmentY(0.45F);
-        getContentPane().add(jLabel4);
-        jLabel4.setBounds(394, 0, 24, 30);
-
-        jLabel3.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Cliente Check Out");
-        getContentPane().add(jLabel3);
-        jLabel3.setBounds(10, 0, 140, 40);
-
-        jLabel2.setFont(new java.awt.Font("Trebuchet MS", 0, 18)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("MENU PRINCIPAL");
-        getContentPane().add(jLabel2);
-        jLabel2.setBounds(140, 70, 140, 40);
 
         btnReporteConsolidado.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
         btnReporteConsolidado.setText("Reporte Consolidado");
+        btnReporteConsolidado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReporteConsolidadoActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnReporteConsolidado);
-        btnReporteConsolidado.setBounds(120, 230, 180, 60);
+        btnReporteConsolidado.setBounds(130, 220, 180, 50);
 
         btnSolicitarFactura.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
         btnSolicitarFactura.setText("Solicitar Factura");
+        btnSolicitarFactura.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSolicitarFacturaActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnSolicitarFactura);
-        btnSolicitarFactura.setBounds(120, 140, 180, 60);
+        btnSolicitarFactura.setBounds(150, 150, 140, 50);
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/edu/espe/distribuidas/cliente/check/out/iconos/Menu.PNG"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/edu/espe/distribuidas/cliente/check/out/iconos/FondoMenuPrincipal.PNG"))); // NOI18N
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(0, 0, 434, 540);
+        jLabel1.setBounds(0, 0, 452, 530);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSolicitarFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSolicitarFacturaActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        SolicitarFacturaFRM solicitarFactura = new SolicitarFacturaFRM();
+        solicitarFactura.setVisible(true);
+    }//GEN-LAST:event_btnSolicitarFacturaActionPerformed
+
+    private void btnReporteConsolidadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteConsolidadoActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        ConsolidarReporteFRM reporteConsolidado = new ConsolidarReporteFRM();
+        reporteConsolidado.setVisible(true);
+    }//GEN-LAST:event_btnReporteConsolidadoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -113,8 +119,5 @@ public class MenuFRM extends javax.swing.JFrame {
     private javax.swing.JButton btnReporteConsolidado;
     private javax.swing.JButton btnSolicitarFactura;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     // End of variables declaration//GEN-END:variables
 }

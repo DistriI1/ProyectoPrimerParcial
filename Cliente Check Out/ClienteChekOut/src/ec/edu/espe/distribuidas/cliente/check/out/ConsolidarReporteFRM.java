@@ -22,12 +22,12 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author DAVID
  */
-public class SolicitarFacturaFRM extends javax.swing.JFrame {
+public class ConsolidarReporteFRM extends javax.swing.JFrame {
 
     /**
      * Creates new form FrameCheckOut
      */
-    public SolicitarFacturaFRM() {
+    public ConsolidarReporteFRM() {
         initComponents();
         this.setLocationRelativeTo(null);
     }
@@ -58,10 +58,8 @@ public class SolicitarFacturaFRM extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 0, 0));
-        setMaximumSize(new java.awt.Dimension(449, 555));
         setMinimumSize(new java.awt.Dimension(449, 555));
         setName("Frame CheckOut"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(449, 555));
         getContentPane().setLayout(null);
 
         btnRegresar.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
@@ -97,7 +95,7 @@ public class SolicitarFacturaFRM extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("Ingrese el codigo de la reserva");
+        jLabel4.setText("Ingrese el codigo del Tour");
         getContentPane().add(jLabel4);
         jLabel4.setBounds(140, 140, 170, 15);
 
@@ -126,7 +124,7 @@ public class SolicitarFacturaFRM extends javax.swing.JFrame {
 
             },
             new String [] {
-                "CODIGO", "TOTAL CONSUMOS", "RECARGO DEL EQUIPAJE"
+                "CODIGO", "NOMBRE DEL TOUR", "TOTAL DE CONSUMOS"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -134,7 +132,7 @@ public class SolicitarFacturaFRM extends javax.swing.JFrame {
         getContentPane().add(jScrollPane1);
         jScrollPane1.setBounds(10, 260, 410, 210);
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/edu/espe/distribuidas/cliente/check/out/iconos/FondoSolicitarFact.PNG"))); // NOI18N
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/edu/espe/distribuidas/cliente/check/out/iconos/FondoConsolidarReporte.PNG"))); // NOI18N
         getContentPane().add(jLabel3);
         jLabel3.setBounds(0, -10, 440, 550);
 
@@ -200,21 +198,23 @@ public class SolicitarFacturaFRM extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SolicitarFacturaFRM.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConsolidarReporteFRM.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(SolicitarFacturaFRM.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConsolidarReporteFRM.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SolicitarFacturaFRM.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConsolidarReporteFRM.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(SolicitarFacturaFRM.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConsolidarReporteFRM.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new SolicitarFacturaFRM().setVisible(true);
+                new ConsolidarReporteFRM().setVisible(true);
             }
         });
     }

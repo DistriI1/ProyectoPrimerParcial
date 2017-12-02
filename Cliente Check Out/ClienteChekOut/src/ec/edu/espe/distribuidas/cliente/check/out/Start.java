@@ -22,8 +22,8 @@ public class Start {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        SolicitarFacturaFRM frm = new SolicitarFacturaFRM();
-        frm.setVisible(true);
+        MenuFRM menu = new MenuFRM();
+        menu.setVisible(true);
     }
     }
     

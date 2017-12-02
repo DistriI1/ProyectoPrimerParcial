@@ -33,7 +33,6 @@ public class Respuesta {
     
      public void recibirRespuesta(String peticion,JTable jTable1,JTextField txtCodigoReserva){
         DefaultTableModel modelo=(DefaultTableModel) jTable1.getModel(); 
-        
         char[] arrayChar = peticion.toCharArray();
         for(int i=0; i<arrayChar.length; i++){
             if(i<=1){

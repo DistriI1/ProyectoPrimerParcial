@@ -158,12 +158,11 @@ public class Reserva {
             //Seteo los valores
             cst.setString(1, codigo);
             cst.setString(2, identificacion);
-            cst.setString(3, codigoTipoTour);
-            cst.setInt(4, codigoCrucero);
-            cst.setInt(5, codigoCamarote);
-            cst.setString(6, codigoTipoAlimentacion);
-            cst.setString(7, valorFinal);
-            cst.setString(8, estado);
+            cst.setInt(3, codigoCrucero);
+            cst.setInt(4, codigoCamarote);
+            cst.setString(5, codigoTipoAlimentacion);
+            cst.setString(6, valorFinal);
+            cst.setString(7, estado);
             System.out.println("Valores seteados");
             cst.execute();
 

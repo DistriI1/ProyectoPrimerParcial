@@ -6,6 +6,8 @@
 package ec.edu.espe.distribuidas.servidorHades.model;
 
 import java.math.BigDecimal;
+import java.sql.CallableStatement;
+import java.sql.SQLException;
 import java.util.Date;
 
 /**
@@ -79,5 +81,37 @@ public class Consumo {
 
     public void setReferencia(String referencia) {
         this.referencia = referencia;
+    }
+    public boolean registroConsumo(int codigoTour, int numeroCamarote) {
+        Conexion cn = new Conexion();
+        boolean bandera = true;
+        try {
+            // Carga el driver de oracle
+            cn.conectar();
+           
+            // Llamada al procedimiento almacenado
+            CallableStatement cst = cn.prepareCall("{call registroConsumo (?,?,?,?,?,?,?,?)}");
+            
+            cst.setInt(1, codigoTour);
+            cst.setInt(2, numeroCamarote);
+            cst.setInt(3, codigoItem);
+            cst.setInt(4, cantidad);
+            cst.setString(5, referencia);
+            cst.setDate(6, (java.sql.Date) fecha);
+            cst.setString(7, valor.toString());
+
+            
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage());
+            bandera=false;
+        } finally {
+            try {
+                cn.close();
+            } catch (SQLException ex) {
+                System.out.println("Error: " + ex.getMessage());
+            }
+        }
+        
+        return bandera;
     }    
 }

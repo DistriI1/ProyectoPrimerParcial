@@ -24,12 +24,12 @@ public class TuristaReserva {
     private String identificacion;
     private String nombre;
     private Date fechaNacimiento;
-    private BigDecimal pesoMaleta;
+    private String pesoMaleta;
 
     public TuristaReserva() {
     }
 
-    public TuristaReserva(Integer codigo, String codigoreserva, String tipoIdentificacion, String identificacion, String nombre, Date fechaNacimiento, BigDecimal pesoMaleta) {
+    public TuristaReserva(Integer codigo, String codigoreserva, String tipoIdentificacion, String identificacion, String nombre, Date fechaNacimiento, String pesoMaleta) {
         this.codigo = codigo;
         this.codigoreserva = codigoreserva;
         this.tipoIdentificacion = tipoIdentificacion;
@@ -87,11 +87,11 @@ public class TuristaReserva {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public BigDecimal getPesoMaleta() {
+    public String getPesoMaleta() {
         return pesoMaleta;
     }
 
-    public void setPesoMaleta(BigDecimal pesoMaleta) {
+    public void setPesoMaleta(String pesoMaleta) {
         this.pesoMaleta = pesoMaleta;
     }
 

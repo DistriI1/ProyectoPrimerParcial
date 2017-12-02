@@ -95,7 +95,7 @@ class Client extends Thread {
             Consumo consumo;
             Date fechaTemp;
             Crucero crucero;
-            String codigoReserva;
+            String codigoReserva = "";
 
             while (true) {
                 String messageFromClient = in.readLine();
@@ -380,7 +380,7 @@ class Client extends Thread {
                             List<String[]> listado = new ArrayList<>();
                             listado = reserva.getListado();
                             cuerpo += "OKK";
-                            cuerpo+= reserva.getCodigoTipoTour();
+                            cuerpo += reserva.getCodigoTipoTour();
                             for (int i = 0; i < listado.size(); i++) {
                                 cuerpo += Arrays.toString(listado.get(i)).replace(", ", "&");
                                 cuerpo += "|";
@@ -408,8 +408,27 @@ class Client extends Thread {
 
                         turistaReserva = new TuristaReserva();
                         cuerpoMensaje = messageFromClient.split("&");
+                        turistaReserva.setCodigoreserva(codigoReserva);
                         turistaReserva.setIdentificacion(cuerpoMensaje[0].substring(66));
-                        turistaReserva.setPesoMaleta(new BigDecimal(cuerpoMensaje[1]));
+                        turistaReserva.setPesoMaleta(cuerpoMensaje[1]);
+                      
+                        if (turistaReserva.registrarTurista()) {
+                            cuerpo += "OKK";
+                            cabeza += "RPSERV";
+                            cabeza += fecha.obtenerFecha() + idMensaje + longitudCuerpo(cuerpo.length()) + md5(cuerpo);
+                            out.println(cabeza + cuerpo);
+                            out.flush();
+                            cabeza = "";
+                            cuerpo = "";
+                        } else {
+                            cuerpo += "BAD";
+                            cabeza += "RPSERV";
+                            cabeza += fecha.obtenerFecha() + idMensaje + longitudCuerpo(cuerpo.length()) + md5(cuerpo);
+                            out.println(cabeza + cuerpo);
+                            out.flush();
+                            cabeza = "";
+                            cuerpo = "";
+                        }                        
                         break;
 
                     case "REGCONSTUR":

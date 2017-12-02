@@ -15,7 +15,7 @@ import java.util.Date;
  * @author joel
  */
 public class Consumo {
-    
+
     private Integer codigoItem;
     private String codigoReserva;
     private Integer cantidad;
@@ -82,16 +82,17 @@ public class Consumo {
     public void setReferencia(String referencia) {
         this.referencia = referencia;
     }
+
     public boolean registroConsumo(int codigoTour, int numeroCamarote) {
         Conexion cn = new Conexion();
         boolean bandera = true;
         try {
             // Carga el driver de oracle
             cn.conectar();
-           
+
             // Llamada al procedimiento almacenado
-            CallableStatement cst = cn.prepareCall("{call registroConsumo (?,?,?,?,?,?,?,?)}");
-            
+            CallableStatement cst = cn.prepareCall("{call registroConsumo (?,?,?,?,?,?,?)}");
+
             cst.setInt(1, codigoTour);
             cst.setInt(2, numeroCamarote);
             cst.setInt(3, codigoItem);
@@ -100,10 +101,17 @@ public class Consumo {
             cst.setString(6, fecha);
             cst.setString(7, valor.toString());
 
-            
+            System.out.println("Valores seteados");
+
+            cst.execute();
+
+            System.out.println("procedure ejecutado");
+
+            cst.close();
+
         } catch (SQLException ex) {
             System.out.println("Error: " + ex.getMessage());
-            bandera=false;
+            bandera = false;
         } finally {
             try {
                 cn.close();
@@ -111,7 +119,7 @@ public class Consumo {
                 System.out.println("Error: " + ex.getMessage());
             }
         }
-        
+
         return bandera;
-    }    
+    }
 }

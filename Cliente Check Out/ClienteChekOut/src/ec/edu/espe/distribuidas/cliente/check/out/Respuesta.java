@@ -52,48 +52,39 @@ public class Respuesta {
             if(i<=33&&i>1&&i>5&&i>19&&i>29){
                 longitudR += arrayChar[i];
             }
-            if(i<=64&&i>1&&i>5&&i>19&&i>29&&i>33){
+            if(i<=65&&i>1&&i>5&&i>19&&i>29&&i>33){
                 hashR += arrayChar[i];
             }
-            if(i>64&&i<=67){
+            if(i>65&&i<=68){
                 respuesta += arrayChar[i];
+                //band=i;
             }
-            if(arrayChar[i]=='&'){
+            if(i>68 && arrayChar[i]!='&'){
                 //totalConsumos = i;
-                band++;
-                if(band==1){
-                    totalConsumos = i;
-                for (j = totalConsumos+1; j < arrayChar.length; j++) {
-                    if(arrayChar[j]!='&')
-                    respuesta1 += arrayChar[j];
-                    if(arrayChar[j]=='&')
+                respuesta1 += arrayChar[i];
+                
+                
+                }
+            if(arrayChar[i]=='&'){
+                    band=i;
                     break;
-                }
-                }
-                if(band==2){
-                    totalConsumos = i;
-                for (j = totalConsumos+1; j < arrayChar.length; j++) {
-                    respuesta2 += arrayChar[j];
-                }
-                }
-            }
+            }   
+            
         }
-        JOptionPane.showMessageDialog(null, "TIPO DE MENSAJE " + tipoMensajeR);
-        JOptionPane.showMessageDialog(null, "ORIGINADOR " + originadorR);
-        JOptionPane.showMessageDialog(null, "FECHA Y HORA " + fechaHoraR);
-        JOptionPane.showMessageDialog(null, "ID MENSAJE " + idMensajeR);
-        JOptionPane.showMessageDialog(null, "LONGITUD " + longitudR);
-        JOptionPane.showMessageDialog(null, "CODIGO HASH " + hashR);
-        JOptionPane.showMessageDialog(null, "RESPUESTA " + respuesta);
-        JOptionPane.showMessageDialog(null, "TOTAL CONSUMOS " + respuesta1);
-        JOptionPane.showMessageDialog(null, "RECARGO DE EQUIPAJE " + respuesta2);
+        if(arrayChar[band]=='&')
+                {
+                    for (int k = band+1; k < arrayChar.length; k++) {
+                        respuesta2 += arrayChar[k];
+                    }
+                }
         if(respuesta.equals("OKK")){
             Object [] fila=new Object[3];
             fila[0]=txtCodigoReserva.getText(); 
-            fila[1]=respuesta1; 
-            fila[2]=respuesta2; 
+            fila[1]=respuesta2; 
+            fila[2]=respuesta1; 
             modelo.addRow(fila); 
             jTable1.setModel(modelo); 
+            txtCodigoReserva.setText("");
         }
         else{
             txtCodigoReserva.setText("");

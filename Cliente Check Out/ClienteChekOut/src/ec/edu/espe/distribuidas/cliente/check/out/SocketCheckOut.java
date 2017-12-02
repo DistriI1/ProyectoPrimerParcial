@@ -22,8 +22,8 @@ import java.util.logging.Logger;
 public class SocketCheckOut {
 
     private static final Logger LOG = Logger.getLogger(SocketCheckOut.class.getName());
-    private String server = "192.168.1.109"; 
-    private Integer port = 2000;
+    private String server = "192.168.1.5"; 
+    private Integer port = 2001;
     private Socket client;
     private BufferedWriter oos =null;
     private BufferedReader ois =null;

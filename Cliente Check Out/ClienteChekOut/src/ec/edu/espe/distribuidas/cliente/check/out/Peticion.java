@@ -30,12 +30,11 @@ public class Peticion {
                 }
                 return longi;
     }
-    public String cabecera(String Codigo){
+    public String cabecera(String Codigo, String idMensaje1){
         Fecha fecha = new Fecha();
         String tipoMensaje = "RQ";
         String originador = "CHON";
-        String idMensaje = "FACTCONCLI";
         String cuerpoLongitud = longitudCuerpo(Codigo);
-        return tipoMensaje+originador+fecha.obtenerFecha()+idMensaje+cuerpoLongitud+hash.hash(Codigo)+Codigo;
+        return tipoMensaje+originador+fecha.obtenerFecha()+idMensaje1+cuerpoLongitud+hash.hash(Codigo)+Codigo;
     }
 }

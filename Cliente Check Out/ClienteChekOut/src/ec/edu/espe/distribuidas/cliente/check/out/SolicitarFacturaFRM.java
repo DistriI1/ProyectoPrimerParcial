@@ -33,6 +33,7 @@ public class SolicitarFacturaFRM extends javax.swing.JFrame {
     }
     private Peticion peticion= new Peticion();
     private Respuesta respuesta = new Respuesta();
+    SocketCheckOut conn = new SocketCheckOut();
     private static final Logger LOG = Logger.getLogger(Start.class.getName());
    
 
@@ -65,7 +66,7 @@ public class SolicitarFacturaFRM extends javax.swing.JFrame {
         getContentPane().setLayout(null);
 
         btnRegresar.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
-        btnRegresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/edu/espe/distribuidas/cliente/check/out/iconos/magnifier1.png"))); // NOI18N
+        btnRegresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/edu/espe/distribuidas/cliente/check/out/iconos/reply.png"))); // NOI18N
         btnRegresar.setText("Regresar");
         btnRegresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -126,7 +127,7 @@ public class SolicitarFacturaFRM extends javax.swing.JFrame {
 
             },
             new String [] {
-                "CODIGO", "TOTAL CONSUMOS", "RECARGO DEL EQUIPAJE"
+                "CODIGO", "TOTAL CONSUMOS", "RECARGO DEL EQUIPAJETT"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -151,6 +152,7 @@ public class SolicitarFacturaFRM extends javax.swing.JFrame {
         if(Caracteres.length()>=10){ 
             evt.consume(); 
         } 
+      
     }//GEN-LAST:event_txtCodigoReservaKeyTyped
 
     private void txtCodigoReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoReservaActionPerformed
@@ -165,22 +167,27 @@ public class SolicitarFacturaFRM extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-         try{
-            String Codigo = "";
-            SocketCheckOut client = new SocketCheckOut();
-            client.connect();
-            Codigo = txtCodigoReserva.getText();
-            client.send(peticion.cabecera(Codigo));
-            JOptionPane.showMessageDialog(null, "Operación realizada correctamente " + peticion.cabecera(Codigo));
-            respuesta.recibirRespuesta("RPSERV20171122234559FACTCONCLI00083867994d1be6e111e067ac5dbf3ae3cOKK&150.30&4",jTable1,txtCodigoReserva);
-            
-        }catch(IOException e){
-         LOG.log(Level.SEVERE,"Ocurrio un error",e);
-        }
+        MenuFRM obj = new MenuFRM(); 
+        this.setVisible(false);
+        obj.setVisible(true);         
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnBuscarReserva1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarReserva1ActionPerformed
         // TODO add your handling code here:
+        try{
+            String Codigo = "";
+            SocketCheckOut client = new SocketCheckOut();
+            client.connect();
+            Codigo = txtCodigoReserva.getText();
+            client.send(peticion.cabecera(Codigo,"FACTCONCLI"));
+            String message = client.read();
+            respuesta.recibirRespuesta(message, jTable1, txtCodigoReserva);
+            
+        }catch(IOException e){
+         LOG.log(Level.SEVERE,"Ocurrio un error",e);
+        }
+
+        
     }//GEN-LAST:event_btnBuscarReserva1ActionPerformed
 
     /**

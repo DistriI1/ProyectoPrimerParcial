@@ -157,9 +157,7 @@ def main():
         opc = get_specific_input(1, 'int')
         if int(opc) == 1:
             registro_maleta(sock)
-            #opcion_registrarusuario(tipo_mensaje,originador,sock)
     print '================================================================================'
     print >> sys.stderr, 'Cerrando socket'
     sock.close()
-
 main()

@@ -50,7 +50,7 @@ public class Reserva {
     public void setNombreTour(String nombreTour) {
         this.nombreTour = nombreTour;
     }
-    
+
     private BigDecimal totalConsumo;
     private Integer recargo;
 
@@ -79,7 +79,7 @@ public class Reserva {
     public void setListado(List<String[]> listado) {
         this.listado = listado;
     }
-    
+
     public Reserva() {
     }
 
@@ -204,12 +204,17 @@ public class Reserva {
             cn.conectar();
 
             // Llamada al procedimiento almacenado
-            CallableStatement cst = cn.prepareCall("{call ingresoCliente (?,?,?,?,?,?,?,?)}");
+            CallableStatement cst = cn.prepareCall("{call ingresoReserva (?,?,?,?,?,?,?,?)}");
 
             //Seteo los valores
-            cst.setString(1, codigo);
-            cst.setString(2, identificacion);
+            cst.setString(1, identificacion);
+            cst.setInt(2, codigoTour);
             cst.setInt(3, codigoCrucero);
+            cst.setInt(4, codigoCamarote);
+            cst.setString(5, codigoTipoAlimentacion);
+            cst.setString(6, valorFinal);
+            cst.setString(7, estado);
+            cst.setInt(8, codigoCrucero);
             System.out.println("Valores seteados");
             cst.execute();
 
@@ -229,10 +234,10 @@ public class Reserva {
         }
         return bandera;
     }
-    
-        public boolean listadoTuristas() {
+
+    public boolean listadoTuristas() {
         Conexion cn = new Conexion();
-        boolean bandera = true ;
+        boolean bandera = true;
 
         try {
 
@@ -244,7 +249,7 @@ public class Reserva {
             cst.registerOutParameter(2, OracleTypes.CURSOR);
             cst.registerOutParameter(3, java.sql.Types.VARCHAR);
             cst.execute();
-            
+
             ResultSet rset = (ResultSet) cst.getObject(2);
 
             // Dump the cursor
@@ -262,7 +267,7 @@ public class Reserva {
 
         } catch (SQLException ex) {
             System.out.println("Error: " + ex.getMessage());
-            bandera=false;
+            bandera = false;
         } finally {
             try {
                 cn.close();
@@ -270,34 +275,34 @@ public class Reserva {
                 System.out.println("Error: " + ex.getMessage());
             }
         }
-        
+
         return bandera;
     }
+
     public boolean reporteConsolidado() {
         Conexion cn = new Conexion();
         boolean bandera = true;
         try {
             // Carga el driver de oracle
             cn.conectar();
-           
+
             // Llamada al procedimiento almacenado
             CallableStatement cst = cn.prepareCall("{call reporteConsolidado (?,?,?)}");
 
-               cst.setInt(1, codigoTour);
-                // Definimos los tipos de los parametros de salida del procedimiento almacenado
-                cst.registerOutParameter(2, java.sql.Types.DECIMAL);
-                cst.registerOutParameter(3, java.sql.Types.VARCHAR);
-                // Ejecuta el procedimiento almacenado
-                cst.execute();
-                
-                // Se obtienen la salida del procedimineto almacenado
-                totalConsumos = cst.getBigDecimal(2);
-                nombreTour = cst.getString(3);
+            cst.setInt(1, codigoTour);
+            // Definimos los tipos de los parametros de salida del procedimiento almacenado
+            cst.registerOutParameter(2, java.sql.Types.DECIMAL);
+            cst.registerOutParameter(3, java.sql.Types.VARCHAR);
+            // Ejecuta el procedimiento almacenado
+            cst.execute();
 
-            
+            // Se obtienen la salida del procedimineto almacenado
+            totalConsumos = cst.getBigDecimal(2);
+            nombreTour = cst.getString(3);
+
         } catch (SQLException ex) {
             System.out.println("Error: " + ex.getMessage());
-            bandera=false;
+            bandera = false;
         } finally {
             try {
                 cn.close();
@@ -305,35 +310,34 @@ public class Reserva {
                 System.out.println("Error: " + ex.getMessage());
             }
         }
-        
+
         return bandera;
-    }    
-    
-       public boolean factura() {
+    }
+
+    public boolean factura() {
         Conexion cn = new Conexion();
         boolean bandera = true;
         try {
             // Carga el driver de oracle
             cn.conectar();
-           
+
             // Llamada al procedimiento almacenado
             CallableStatement cst = cn.prepareCall("{call informacionFactura (?,?,?)}");
-            
-                cst.setString(1, codigo);
-                // Definimos los tipos de los parametros de salida del procedimiento almacenado
-                cst.registerOutParameter(2, java.sql.Types.DECIMAL);
-                cst.registerOutParameter(3, java.sql.Types.INTEGER);
-                // Ejecuta el procedimiento almacenado
-                cst.execute();
-                
-                // Se obtienen la salida del procedimineto almacenado
-                totalConsumos = cst.getBigDecimal(2);
-                recargo = cst.getInt(3);
 
-            
+            cst.setString(1, codigo);
+            // Definimos los tipos de los parametros de salida del procedimiento almacenado
+            cst.registerOutParameter(2, java.sql.Types.DECIMAL);
+            cst.registerOutParameter(3, java.sql.Types.INTEGER);
+            // Ejecuta el procedimiento almacenado
+            cst.execute();
+
+            // Se obtienen la salida del procedimineto almacenado
+            totalConsumos = cst.getBigDecimal(2);
+            recargo = cst.getInt(3);
+
         } catch (SQLException ex) {
             System.out.println("Error: " + ex.getMessage());
-            bandera=false;
+            bandera = false;
         } finally {
             try {
                 cn.close();
@@ -341,8 +345,8 @@ public class Reserva {
                 System.out.println("Error: " + ex.getMessage());
             }
         }
-        
+
         return bandera;
-    }      
-       
+    }
+
 }

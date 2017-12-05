@@ -28,7 +28,7 @@ public class Conexion {
             DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
 
             // Conecta con la base de datos orcldist con el usuario system y la contraseña password
-            cn = DriverManager.getConnection("jdbc:oracle:thin:@192.168.1.101:1521:orcldist", "c##distribuidas", "distribuidas112358");
+            cn = DriverManager.getConnection("jdbc:oracle:thin:@192.168.1.105:1521:orcldist", "c##distribuidas", "distribuidas112358");
         } catch (Exception e) {
             LOG.info("Error en la conexion a la base de datos" + e.getMessage());
         }
